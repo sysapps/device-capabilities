@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html xmlns='http://www.w3.org/1999/xhtml'>
+  <head>
+    <meta http-equiv="Content-Type" content="text/html;charset=utf-8"/>
+    <title>Device Capabilities API </title>
+    <script src='https://www.w3.org/Tools/respec/respec-w3c-common' async class='remove'></script>
+    <script class='remove'>
+      var respecConfig = {
+              specStatus:          "ED"
+          ,   shortName:           "device-capabilities-api"
+          ,   publishDate:         ""
+          ,   previousPublishDate: ""
+          ,   previousMaturity:    ""
+          ,   editors:  [
+                  { name: "Hongbo Min", company: "Intel", companyURL: "http://www.intel.com" }
+              ]
+          ,   edDraftURI:          "http://www.w3.org/2012/sysapps/device-capabilities-api"
+          ,   crEnd:               ""
+          ,   inlineCSS:           true
+          ,   wg:                  "System Application Working Group"
+          ,   wgURI:               "http://www.w3.org/2012/sysapps"
+          ,   wgPublicList:        "public-sysapps"
+          ,   wgPatentURI:         "http://www.w3.org/2004/01/pp-impl/43696/status"
+          ,   otherLinks: [
+                { 
+                  key: "Repository",
+                  data: [
+                     { value: "https://github.com/sysapps/device-capabilities", href: "https://github.com/sysapps/device-capabilities" },
+                  ]
+                }
+             ],
+        };
+    </script>
+  </head>
+  <body>
+    <section id='abstract'>
+      This specification defines a set of System Level APIs to allow Web applications access to various device capabilities of the underlying system Examples of such capabilities include battery status, CPU/memory/storage and current network bandwidth. By use of these APIs, Web applications could have better integration with the system on which they are running.
+    </section>
+    <section id='sotd'>
+      <p>
+        This document is intended to define the Device Capabilities API to make use of various device capabilities in Web applications. To avoid pushing an over-complicated and reduncdant API definitions, it firstly focuses on several general device capabilities, like CPU, memory, storage and display and so on. It should be easily to be extended for supporting a new device capability during API evolution.
+      </p>
+    </section>
+    <section>
+      <h2>Name <a href='http://berjon.com/'>clashes</a> after <span>and <a href='http://w3.org/'>deep</a> stuff</span></h2>
+      <p>
+        Something MUST happen.
+      </p>
+      <p class='issue' title='A real problem'>
+        This is a problem
+      </p>
+      <p class='note' title='About this'>
+        Just a note
+      </p>
+    </section>
+    <section>
+      <h2>Clash here</h2>
+      <dl class='idl' title='interface Dahut'>
+        <dt>void other ()</dt>
+        <dd>
+          Partial would be better.
+        </dd>
+      </dl>
+    </section>
+    <section>
+      <h2>Type Unions</h2>
+      <section>
+        <h2>Two</h2>
+        <dl class="idl" title="interface MutableCapabilities : Capabilities">
+          <dt>(DOMString or sequence&lt;long>) bar()</dt>
+          <dd>without default</dd>
+          <dt>void foo((unsigned long or sequence&lt;unsigned long>) value1)</dt>
+          <dd>without default</dd>
+          <!-- <dt>void foo(boolean value1, DOMString other1)</dt>
+          <dd>without default</dd>
+          <dt>void bar(boolean value2 = true, DOMString other2)</dt>
+          <dd>with default</dd>
+          <dt>void bar(unsigned long value3 = 8.2, DOMString other3 = "something else")</dt>
+          <dd>with default</dd> -->
+        </dl>
+      </section>
+    </section>
+  </body>
+</html>
