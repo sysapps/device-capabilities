@@ -34,7 +34,7 @@
   </head>
   <body>
     <section id='abstract'>
-      This specification defines a set of System Level APIs to allow Web applications access to various device capabilities of the underlying system.Examples of such capabilities include battery status, CPU/memory/storage information and current network bandwidth and so on. By use of these APIs, Web applications could have better integration with the system on which they are running.
+      This specification defines a set of System Level APIs to allow Web applications retrieve the status of the device capabilities supported and system information from the underlying system.
     </section>
     <section id='sotd'>
       <p>
@@ -48,7 +48,7 @@
       <h2>Introduction</h2>
       <p></p>
       <p>
-        The purpose of Device Capabilities API is to provide a set of interfaces and methods for Web applications to retrieve the status and information from the device. Nowadays, the supported capabilities on the device range from smartphone to tablet may be diverse from each other, by use of this API, Web applications are able to be aware of the exact status of the device on which they are running, and are allowed to take full advantage of the available device capabilities. For example, with the knowledge of the number of CPU cores installed on the devices, Web application can decide how many <a href="http://www.whatwg.org/specs/web-workers/current-work/">Web Worker</a> will be created to execute the computing-intensive tasks, and with the knowledge of the sensors supported on the devices, Web application can make use of these sensors to provide another choice of user interaction except for touching based user interaction.
+        The purpose of Device Capabilities API is to provide a set of interfaces and methods for Web applications to retrieve the device status and system information from the underlying system. The supported capabilities provided by the device may be varied from smartphone to tablet, by use of this API, Web applications have the ability to know the exact status of the device on which they are running, and are allowed to take full advantage of the available device capabilities. For example, with the knowledge of the number of CPU cores installed on the devices, Web application can anticipate the optimal number of <a href="http://www.whatwg.org/specs/web-workers/current-work/">Web Worker</a> to be created for the computing-intensive tasks, and with the knowledge of the sensors supported on the devices, Web application can make use of these sensors to provide another choice of user interaction except for touching based user interaction.
       </p>
     </section>
     <section id="conformance">
