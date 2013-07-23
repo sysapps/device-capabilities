@@ -12,7 +12,7 @@
           ,   previousPublishDate: ""
           ,   previousMaturity:    ""
           ,   editors:  [
-                  { name: "Hongbo Min", company: "Intel", companyURL: "http://www.intel.com" }
+                  { name: "Hongbo Min", company: "Intel", companyURL: "http://www.intel.com/software" }
               ]
           ,   edDraftURI:          "http://www.w3.org/2012/sysapps/device-capabilities-api"
           ,   crEnd:               ""
@@ -34,51 +34,115 @@
   </head>
   <body>
     <section id='abstract'>
-      This specification defines a set of System Level APIs to allow Web applications access to various device capabilities of the underlying system Examples of such capabilities include battery status, CPU/memory/storage and current network bandwidth. By use of these APIs, Web applications could have better integration with the system on which they are running.
+      This specification defines a set of System Level APIs to allow Web applications access to various device capabilities of the underlying system.Examples of such capabilities include battery status, CPU/memory/storage information and current network bandwidth and so on. By use of these APIs, Web applications could have better integration with the system on which they are running.
     </section>
     <section id='sotd'>
       <p>
-        This document is intended to define the Device Capabilities API to make use of various device capabilities in Web applications. To avoid pushing an over-complicated and reduncdant API definitions, it firstly focuses on several general device capabilities, like CPU, memory, storage and display and so on. It should be easily to be extended for supporting a new device capability during API evolution.
+        This document is intended to define the Device Capabilities API to retrieve the status of hardware device, get the value of selected properties, and subscribe to asynchronous notifications of some specific properties in Web applications. To avoid pushing an over-complicated and reduncdant API definitions, it firstly focuses on some general device capabilities, like CPU, memory, storage and display and so on. This specification is easy to be extended for supporting a new device capability during API evolution. 
       </p>
-    </section>
-    <section>
-      <h2>Name <a href='http://berjon.com/'>clashes</a> after <span>and <a href='http://w3.org/'>deep</a> stuff</span></h2>
       <p>
-        Something MUST happen.
+        Note that this specification won't duplicate some device capabilities API definitions which are already officially published by W3C working group.For example, <a href="http://www.w3.org/TR/battery-status/">Battery Status API</a>, <a href="http://www.w3.org/TR/netinfo-api/">Network Information API</a>, and <a href="http://www.w3.org/TR/screen-orientation/">Screen Orientation API</a>.
       </p>
-      <p class='issue' title='A real problem'>
-        This is a problem
+    </section>
+    <section class="informative">
+      <h2>Introduction</h2>
+      <p></p>
+      <p>
+        The purpose of Device Capabilities API is to provide a set of interfaces and methods for Web applications to retrieve the status and information from the device. Nowadays, the supported capabilities on the device range from smartphone to tablet may be diverse from each other, by use of this API, Web applications are able to be aware of the exact status of the device on which they are running, and are allowed to take full advantage of the available device capabilities. For example, with the knowledge of the number of CPU cores installed on the devices, Web application can decide how many <a href="http://www.whatwg.org/specs/web-workers/current-work/">Web Worker</a> will be created to execute the computing-intensive tasks, and with the knowledge of the sensors supported on the devices, Web application can make use of these sensors to provide another choice of user interaction except for touching based user interaction.
       </p>
-      <p class='note' title='About this'>
-        Just a note
+    </section>
+    <section id="conformance">
+    </section>
+    <section>
+      <h2>Security and Privacy Considerations</h2>
+      <p>
+      A Web application using this API is granted to access some device specific data which may contain information that the user considers private. For instance a user may become sensitive to a Web application retrieve the available storage free space. Therefore, a conforming implementation of this specification must provide a mechanism that protects the user's privacy and this mechanism should ensure that no information exposed by this API is retrievable without the permission granted.
       </p>
     </section>
     <section>
-      <h2>Clash here</h2>
-      <dl class='idl' title='interface Dahut'>
-        <dt>void other ()</dt>
+      <h2>
+        <a>DeviceCapabilities</a> interface
+      </h2>
+      <p>
+        The <a>DeviceCapabilities</a> interface is exposed on the <a>Navigator</a> object.
+      </p>
+      <dl title="partial interface Navigator" class="idl">
+        <dt>readonly attribute DeviceCapabilities system</dt>
         <dd>
-          Partial would be better.
+          The object that exposes the device capabilities retrieval functionality.
         </dd>
+      </dl>
+      <p>
+        <a>DeviceCapabilities</a> interface encapsulates the methods to retrieve the hardware capabilities and interfaces to query some specific device data, e.g. CPU, memory, storage.
+      </p>
+      <dl title="interface DeviceCapabilities" class='idl'>
+        <dt><a>DeviceRequest</a> getCapabilities()</dt>
+        <dd>Retrieve the hardware capabilities supported by the underlying system on which the Web application is running. </dd>
       </dl>
     </section>
     <section>
-      <h2>Type Unions</h2>
+      <h2>Device Capabilities Properties</h2>
       <section>
-        <h2>Two</h2>
-        <dl class="idl" title="interface MutableCapabilities : Capabilities">
-          <dt>(DOMString or sequence&lt;long>) bar()</dt>
-          <dd>without default</dd>
-          <dt>void foo((unsigned long or sequence&lt;unsigned long>) value1)</dt>
-          <dd>without default</dd>
-          <!-- <dt>void foo(boolean value1, DOMString other1)</dt>
-          <dd>without default</dd>
-          <dt>void bar(boolean value2 = true, DOMString other2)</dt>
-          <dd>with default</dd>
-          <dt>void bar(unsigned long value3 = 8.2, DOMString other3 = "something else")</dt>
-          <dd>with default</dd> -->
+        <h2>CPU</h2>
+      </section>
+      <section>
+        <h2>Memory</h2>
+      </section>
+      <section>
+        <h2>Storage</h2>
+      </section>
+      <section>
+        <h2>Display</h2>
+      </section>
+    </section>
+    <section>
+      <h2><a>DeviceRequest</a> Interface</h2>
+      <section class='issue'>
+        <p>
+          The <a>DeviceRequest</a> interface is somewhat duplicated with DOMRequest definition in <a href="http://runtime.sysapps.org">Runtime Model specification</a>. It might be better if we have an unified definitions to remove such a reduncdant definition.
+        </p>
+      </section>
+      <p>
+        The <a>DeviceRequest</a> interface represents an ongoing operation. It provides callbacks that are called when 
+        the operation completes, as well as a reference to the operation's result. A method that initiates an operation may return a DeviceRequest object that can be used to monitor the progress of that operation.
+      </p>
+      <dl title="interface DeviceRequest : EventTarget" class="idl">
+        <dt>readonly attribute ReadyState readyState</dt>
+        <dd>Indicates the state of the request.</dd>
+
+        <dt>readonly attribute DOMError? error</dt>
+        <dd>An error that occured during the request. Errors are as defined in [[!DOM4]].</dd>
+
+        <dt>readonly attribute any result</dt>
+        <dd>Indicates the result of the request. The type depends on the sort of request, and is specified in the
+        description of each method that returns a <code>DeviceRequest</code> object.</dd>
+
+        <dt class="no-docs">
+          attribute EventHandler onsuccess
+        </dt>
+        <dd></dd>
+
+        <dt class="no-docs">
+          attribute EventHandler onerror
+        </dt>
+        <dd></dd>
+      </dl>
+      <section>
+        <h2>Enumerations</h2>
+        <p>A <a>DeviceRequest</a> can be in one of the following states: </p>
+        <dl class="idl" title="enum ReadyState">
+            <dt>pending</dt>
+            <dd>
+                The request has been made and it is progressing.
+            </dd>
+            <dt>done</dt>
+            <dd>
+                The request has been already completed.
+            </dd>
         </dl>
       </section>
+    <section>
+      <h2>Requirements & Use Case</h2>
     </section>
   </body>
 </html>
