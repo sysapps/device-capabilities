@@ -12,7 +12,8 @@
           ,   previousPublishDate: ""
           ,   previousMaturity:    ""
           ,   editors:  [
-                  { name: "Hongbo Min", company: "Intel", companyURL: "http://www.intel.com/software" }
+                  { name: "Hongbo Min", company: "Intel", companyURL: "http://www.intel.com/software" },
+                  { name: "..." }
               ]
           ,   edDraftURI:          "http://www.w3.org/2012/sysapps/device-capabilities-api"
           ,   crEnd:               ""
@@ -34,14 +35,14 @@
   </head>
   <body>
     <section id='abstract'>
-      This specification defines a set of System Level APIs to allow Web applications retrieve the status of the device capabilities supported and system information from the underlying system.
+      This specification defines a set of System Level APIs to allow Web applications retrieve the status of the device capabilities supported and system information from the underlying device.
     </section>
     <section id='sotd'>
       <p>
         This document is intended to define the Device Capabilities API to retrieve the status of hardware device, get the value of selected properties, and subscribe to asynchronous notifications of some specific properties in Web applications. To avoid pushing an over-complicated and reduncdant API definitions, it firstly focuses on some general device capabilities, like CPU, memory, storage and display and so on. This specification is easy to be extended for supporting a new device capability during API evolution. 
       </p>
       <p>
-        Note that this specification won't duplicate some device capabilities API definitions which are already officially published by W3C working group.For example, <a href="http://www.w3.org/TR/battery-status/">Battery Status API</a>, <a href="http://www.w3.org/TR/netinfo-api/">Network Information API</a>, and <a href="http://www.w3.org/TR/screen-orientation/">Screen Orientation API</a>.
+        Note that this specification doesn't attempt to re-define device APIs which are already officially published by W3C working group. For example, <a href="http://www.w3.org/TR/battery-status/">Battery Status API</a>, <a href="http://www.w3.org/TR/netinfo-api/">Network Information API</a>, and <a href="http://www.w3.org/TR/screen-orientation/">Screen Orientation API</a>. If the published device API specification cannot satisfy the requirements, the right way is to consider how to extend it.
       </p>
     </section>
     <section class="informative">
@@ -56,91 +57,173 @@
     <section>
       <h2>Security and Privacy Considerations</h2>
       <p>
-      A Web application using this API is granted to access some device specific data which may contain information that the user considers private. For instance a user may become sensitive to a Web application retrieve the available storage free space. Therefore, a conforming implementation of this specification must provide a mechanism that protects the user's privacy and this mechanism should ensure that no information exposed by this API is retrievable without the permission granted.
+      A Web application using this API is granted to access some device specific data which may contain information that is treated as private by end-user. For instance a user may become sensitive to a Web application retrieve the available storage free space. Therefore, a conforming implementation of this specification MUST provide a mechanism that protects the user's privacy and this mechanism should ensure that no information exposed by this API is retrievable without the permission granted.
       </p>
     </section>
     <section>
       <h2>
         <a>DeviceCapabilities</a> interface
       </h2>
-      <p>
-        The <a>DeviceCapabilities</a> interface is exposed on the <a>Navigator</a> object.
-      </p>
-      <dl title="partial interface Navigator" class="idl">
-        <dt>readonly attribute DeviceCapabilities system</dt>
-        <dd>
-          The object that exposes the device capabilities retrieval functionality.
-        </dd>
-      </dl>
-      <p>
-        <a>DeviceCapabilities</a> interface encapsulates the methods to retrieve the hardware capabilities and interfaces to query some specific device data, e.g. CPU, memory, storage.
-      </p>
-      <dl title="interface DeviceCapabilities" class='idl'>
-        <dt><a>DeviceRequest</a> getCapabilities()</dt>
-        <dd>Retrieve the hardware capabilities supported by the underlying system on which the Web application is running. </dd>
-      </dl>
+      <section>
+        <p>
+          The <a>DeviceCapabilities</a> interface is exposed on the <a>Navigator</a> object.
+        </p>
+        <dl title="partial interface Navigator" class="idl">
+          <dt>readonly attribute DeviceCapabilities system</dt>
+          <dd>
+            The object that exposes the device capabilities retrieval functionality.
+          </dd>
+        </dl>
+        <section>
+          <p>
+            <a>DeviceCapabilities</a> interface encapsulates a set of methods to retrieve the hardware capabilities and specific device data, e.g. CPU, storage and display, and event handler to register asynchronous notification when the interested system events are triggered. 
+          </p>
+          <p>
+            The methods defined in <a>DeviceCapabilities</a>are designed to return a <dfn id="promise"><code><a href="http://dom.spec.whatwg.org/#promise">Promise</a></code></dfn> object and follow a specific pattern when invoked:
+            <ol>
+              <li>
+                Make a request to the system to retrieve the specified information implied by the method name;
+              </li>
+              <li>
+                Let <em><a href="#promise">promise</a></em> be a new <code><a href="#promise">Promise</a></code> object and <em>resolver</em> its associated resolver.
+              </li>
+              <li>
+                Return <em><a href="#promise">promise</a></em> and run the remaining steps asynchronously.
+              </li>
+              <li>
+                If an error occurs, run these substeps and then terminate these steps:
+                <ol>
+                  <li>
+                    Let <em>error</em> be a new <code>DOMError</code> object whose name is <code>"UnknownError"</code>,
+                  </li>
+                  <li>
+                    Run <em>resolver</em>'s internal <em>reject</em> algorithm with <em>error</em> as <code>value</code>.
+                  </li>
+                </ol>
+              </li>
+              <li>
+                If the operation successfully completes, run these substeps:
+                <ol>
+                  <li>
+                    Let <em>data</em> be a new object for the specified device information (e.g. <a>DeviceCPU</a>, <a>DeviceStorage</a> and <a >DeviceDisplay</a>) that were retrieved, 
+                  </li>
+                  <li>
+                    Run <em>resolver</em>'s intenal <code>fulfill</code> algorithm with <em>data</em> as <code>value</code>.
+                  </li>
+                </ol>
+              </li>
+            </ol>
+          </p>
+          <dl title="interface DeviceCapabilities" class='idl'>
+            <dt><a>Promise</a> getCapabilities()</dt>
+            <dd>Retrieve the hardware capabilities supported by the underlying system on which the Web application is running. </dd>
+            <dt>Promise getCPUInfo()</dt>
+            <dd>Retrieve the specific information for CPU</dd>
+            <dt>Promise getMemoryInfo()</dt>
+            <dd>Retrieve the memory information</dd>
+            <dt>Promise getStorageInfo()</dt>
+            <dd>Retrieve the storage information</dd>
+            <dt>Promise getDisplayInfo()</dt>
+            <dd>Retrieve the display information</dd>
+          </dl>
+        </section>
+      </section>
     </section>
     <section>
       <h2>Device Capabilities Properties</h2>
       <section>
+        <h2>Profile</h2>
+        <section>
+          <p><a>DeviceCapabilityProfile</a> acts as a feature supported matrix indicating the capabilities supported by the system.</p>
+          <dl title="interface DeviceCapabilityProfile" class='idl'>
+            <dt>readonly attribute boolean bluetooth</dt>
+            <dd>Indicate whether the device supports Bluetooth.</dd>
+            <dt>readonly attribute boolean nfc</dt>
+            <dd>Indicate whether the device supports Near Filed Communication.</dd>
+            <dt>readonly attribute unsigned int multiTouchCount</dt>
+            <dd>Indicate how many touch points supported by the device.</dd>
+            <dt>readonly attribute boolean wifi</dt>
+            <dd>Indicate whether the device supports WiFi network connection.</dd>
+            <dt>readonly attribute boolean wifiDirect</dt>
+            <dd>Indicate whether the device supports wifiDirect.</dd>
+            <dt>readonly attribute boolean camera</dt>
+            <dd>Indicate whether the device has a camera. Should be always true if any of <a>cameraFront</a> or <a>cameoBack</a> is true</a>.</dd>
+            <dt>readonly attribute boolean cameraFront</dt>
+            <dd>Indicate whether the device has a front camera. The facing of front camera is the same of that of screen.</dd>
+            <dt>readonly attribute boolean cameraBack</dt>
+            <dd>Indicate whether the device has a back camera. The facing of back camera is opposite to that of screen.</dd>
+            <dt>readonly attribute boolean locationGps</dt>
+            <dd>Indicate whether the device supports GPS based positioning feature.</dd>
+            <dt>readonly attribute boolean locationWps</dt>
+            <dd>Indicate whether the device supports WiFi based positioning feature.</dd>
+            <dt>readonly attribute boolean microphone</dt>
+            <dd>Indicate whether the device has a microphone.</dd>
+            <dt>readonly attribute boolean accelerometer</dt>
+            <dd>Indicate whether the device supports measuring acceleration.</dd>
+            <dt>readonly attribute boolean barometer</dt>
+            <dd>Indicate whether the device supports measuring atmospheric pressure.</dd>
+            <dt>readonly attribute boolean gyroscope</dt>
+            <dd>Indicate whether the device supports gyroscope for rotation detection.</dd>
+            <dt>readonly attribute boolean magnetometer</dt>
+            <dd>Indicate whether the device support measuring the strength of magnetic field.</dd>
+            <dt>readonly attribute boolean gravimeter</dt>
+            <dd>Indicate whether the device supports measuring variations in the gravitational field of the earth.</dd>
+            <dt>readonly attribute boolean photometer</dt>
+            <dd>Indicate whether the device supports measuring the luminous intensity.</dd>
+            <dt>readonly attribute boolean proximity</dt>
+            <dd>Indicate whether the device supports measuring the property of being close.</dd>
+            <dt>readonly attribute boolean tiltmeter</dt>
+            <dd>Indicate whether the device supports measuring linear acceleration.</dd>  
+          </dl>
+        </section>
+      </section>
+      <section>
         <h2>CPU</h2>
+        <section>
+          <dl title="interface DeviceCPU" class='idl'>
+            <dt>readonly attribute unsigned int numOfProcessors</dt>
+            <dt>readonly attribute DOMString archName</dt>
+            <dt>readonly attribute float load</dt>
+          </dl>
+        </section>
       </section>
       <section>
         <h2>Memory</h2>
+        <section>
+          <dl title="interface DeviceMemory" class='idl'>
+            <dt>readonly attribute unsigned long capacity</dt>
+            <dt>readonly attribute unsigend long availableCapacity</dt>
+          </dl>
+        </section>
       </section>
       <section>
         <h2>Storage</h2>
+        <section>
+          <dl title="interface DeviceStorage" class='idl'>
+            <dt>readonly attribute <a>DeviceStorageUnit</a> storages[]</dt>
+          </dl>
+        </section>
+        <section>
+          <h2><a>DeviceStorageUnit</a> interface<h2>
+          <dl title="interface DeviceStorageUnit" class='idl'>
+          </dl>
+        </section>
       </section>
       <section>
         <h2>Display</h2>
+        <section>
+          <dl title="interface DeviceDisplay" class='idl'>
+            <dt>readonly attribute <a>DeviceDisplayUnit</a> displays[]</dt>
+          </dl>
+        </section>
+        <section>
+          <h2><a>DeviceDisplayUnit</a> interface<h2>
+          <dl title="interface DeviceDisplayUnit" class='idl'>
+
+          </dl>
+        </section>
       </section>
     </section>
-    <section>
-      <h2><a>DeviceRequest</a> Interface</h2>
-      <section class='issue'>
-        <p>
-          The <a>DeviceRequest</a> interface is somewhat duplicated with DOMRequest definition in <a href="http://runtime.sysapps.org">Runtime Model specification</a>. It might be better if we have an unified definitions to remove such a reduncdant definition.
-        </p>
-      </section>
-      <p>
-        The <a>DeviceRequest</a> interface represents an ongoing operation. It provides callbacks that are called when 
-        the operation completes, as well as a reference to the operation's result. A method that initiates an operation may return a DeviceRequest object that can be used to monitor the progress of that operation.
-      </p>
-      <dl title="interface DeviceRequest : EventTarget" class="idl">
-        <dt>readonly attribute ReadyState readyState</dt>
-        <dd>Indicates the state of the request.</dd>
-
-        <dt>readonly attribute DOMError? error</dt>
-        <dd>An error that occured during the request. Errors are as defined in [[!DOM4]].</dd>
-
-        <dt>readonly attribute any result</dt>
-        <dd>Indicates the result of the request. The type depends on the sort of request, and is specified in the
-        description of each method that returns a <code>DeviceRequest</code> object.</dd>
-
-        <dt class="no-docs">
-          attribute EventHandler onsuccess
-        </dt>
-        <dd></dd>
-
-        <dt class="no-docs">
-          attribute EventHandler onerror
-        </dt>
-        <dd></dd>
-      </dl>
-      <section>
-        <h2>Enumerations</h2>
-        <p>A <a>DeviceRequest</a> can be in one of the following states: </p>
-        <dl class="idl" title="enum ReadyState">
-            <dt>pending</dt>
-            <dd>
-                The request has been made and it is progressing.
-            </dd>
-            <dt>done</dt>
-            <dd>
-                The request has been already completed.
-            </dd>
-        </dl>
-      </section>
     <section>
       <h2>Requirements & Use Case</h2>
     </section>
