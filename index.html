@@ -12,7 +12,8 @@
           ,   previousPublishDate: ""
           ,   previousMaturity:    ""
           ,   editors:  [
-                  { name: "Hongbo Min", company: "Intel", companyURL: "http://www.intel.com/software" },
+                  { name: "Hongbo Min", company: "Intel",
+                    companyURL: "http://www.intel.com/software" },
                   { name: "..." }
               ]
           ,   edDraftURI:          "http://www.w3.org/2012/sysapps/device-capabilities-api"
@@ -23,10 +24,11 @@
           ,   wgPublicList:        "public-sysapps"
           ,   wgPatentURI:         "http://www.w3.org/2004/01/pp-impl/43696/status"
           ,   otherLinks: [
-                { 
+                {
                   key: "Repository",
                   data: [
-                     { value: "https://github.com/sysapps/device-capabilities", href: "https://github.com/sysapps/device-capabilities" },
+                     { value: "https://github.com/sysapps/device-capabilities",
+                       href: "https://github.com/sysapps/device-capabilities" },
                   ]
                 }
              ],
@@ -35,21 +37,54 @@
   </head>
   <body>
     <section id='abstract'>
-      This specification defines a set of System Level APIs to allow Web applications retrieve the status of the device capabilities supported and system information from the underlying device.
+      This specification defines a set of System Level APIs to allow Web
+      applications retrieve the status of the device capabilities supported and
+      system information from the underlying system.
     </section>
     <section id='sotd'>
       <p>
-        This document is intended to define the Device Capabilities API to retrieve the status of hardware device, get the value of selected properties, and subscribe to asynchronous notifications of some specific properties in Web applications. To avoid pushing an over-complicated and reduncdant API definitions, it firstly focuses on some general device capabilities, like CPU, memory, storage and display and so on. This specification is easy to be extended for supporting a new device capability during API evolution. 
+        This document is intended to define the Device Capabilities API to
+        retrieve the status of hardware device, get the value of selected
+        properties, and subscribe to asynchronous notifications of some specific
+        properties in Web applications. To avoid pushing an over-complicated and
+        overlapped API definitions, it firstly focuses on some general device
+        capabilities, like CPU, memory, storage and display and so on. This
+        specification is easy to be extended for supporting a new device
+        capability during API evolution.
       </p>
       <p>
-        Note that this specification doesn't attempt to re-define device APIs which are already officially published by W3C working group. For example, <a href="http://www.w3.org/TR/battery-status/">Battery Status API</a>, <a href="http://www.w3.org/TR/netinfo-api/">Network Information API</a>, and <a href="http://www.w3.org/TR/screen-orientation/">Screen Orientation API</a>. If the published device API specification cannot satisfy the requirements, the right way is to consider how to extend it.
+        Note that this specification doesn't attempt to re-define device APIs
+        which are already officially published by W3C working group.
+        For example,
+        <a href="http://www.w3.org/TR/battery-status/">
+          Battery Status API
+        </a>,
+        <a href="http://www.w3.org/TR/netinfo-api/">
+          Network Information API
+        </a>, and
+        <a href="http://www.w3.org/TR/screen-orientation/">
+          Screen Orientation API
+        </a>. If the published device API specification cannot satisfy the
+        requirements, the right way is to consider how to extend it.
       </p>
     </section>
     <section class="informative">
       <h2>Introduction</h2>
       <p></p>
       <p>
-        The purpose of Device Capabilities API is to provide a set of interfaces and methods for Web applications to retrieve the device status and system information from the underlying system. The supported capabilities provided by the device may be varied from smartphone to tablet, by use of this API, Web applications have the ability to know the exact status of the device on which they are running, and are allowed to take full advantage of the available device capabilities. For example, with the knowledge of the number of CPU cores installed on the devices, Web application can anticipate the optimal number of <a href="http://www.whatwg.org/specs/web-workers/current-work/">Web Worker</a> to be created for the computing-intensive tasks, and with the knowledge of the sensors supported on the devices, Web application can make use of these sensors to provide another choice of user interaction except for touching based user interaction.
+        The Device Capabilities API provides web apps a way to retrieve device
+        and system information from the underlying operating system. Device
+        capabilities vary a great deal across the wide range of devices
+        applications run on.  This API lets applications take advantage of the
+        capabilities of the device the application is running on. For example,
+        knowing the number of CPU cores allows Web applications to determine an
+        appropriate number of Web Workers to create for a worker pool for a
+        compute intensive task. Knowing which sensors are supported, allows an
+        application to know it can use these sensors to provide an alternative
+        means of user input, perhaps by moving the device.  It is often the case
+        that other APIs let an application detect capabilities one by one through
+        testing, but this is too slow for quickly determining the initial
+        presentation to the user.
       </p>
     </section>
     <section id="conformance">
@@ -57,7 +92,14 @@
     <section>
       <h2>Security and Privacy Considerations</h2>
       <p>
-      A Web application using this API is granted to access some device specific data which may contain information that is treated as private by end-user. For instance a user may become sensitive to a Web application retrieve the available storage free space. Therefore, a conforming implementation of this specification MUST provide a mechanism that protects the user's privacy and this mechanism should ensure that no information exposed by this API is retrievable without the permission granted.
+       A Web application using this API is granted to access some device
+       specific data which may contain information that is treated as private
+       by end-user. For instance a user may become sensitive to a Web
+       application retrieve the available storage free space. Therefore,
+       a conforming implementation of this specification MUST provide a
+       mechanism that protects the user's privacy and this mechanism should
+       ensure that no information exposed by this API is retrievable without
+       the permission granted.
       </p>
     </section>
     <section>
@@ -66,38 +108,54 @@
       </h2>
       <section>
         <p>
-          The <a>DeviceCapabilities</a> interface is exposed on the <a>Navigator</a> object.
+          The <a>DeviceCapabilities</a> interface is exposed on the
+          <a>Navigator</a> object.
         </p>
         <dl title="partial interface Navigator" class="idl">
           <dt>readonly attribute DeviceCapabilities system</dt>
           <dd>
-            The object that exposes the device capabilities retrieval functionality.
+            The object that exposes the device capabilities retrieval
+            functionality.
           </dd>
         </dl>
         <section>
           <p>
-            <a>DeviceCapabilities</a> interface encapsulates a set of methods to retrieve the hardware capabilities and specific device data, e.g. CPU, storage and display, and event handler to register asynchronous notification when the interested system events are triggered. 
+            <a>DeviceCapabilities</a> interface encapsulates a set of methods to
+            retrieve the hardware capabilities and specific device data, e.g.
+            CPU, storage and display, and event handler to register asynchronous
+            notification when the interested system events are triggered.
           </p>
           <p>
-            The methods defined in <a>DeviceCapabilities</a>are designed to return a <dfn id="promise"><code><a href="http://dom.spec.whatwg.org/#promise">Promise</a></code></dfn> object and follow a specific pattern when invoked:
+            The methods defined in <a>DeviceCapabilities</a>are designed to
+            return a
+            <dfn id="promise"><code>
+              <a href="http://dom.spec.whatwg.org/#promise">Promise</a></code>
+            </dfn> object and follow a specific pattern when invoked:
             <ol>
               <li>
-                Make a request to the system to retrieve the specified information implied by the method name;
+                Make a request to the system to retrieve the specified
+                information implied by the method name;
               </li>
               <li>
-                Let <em><a href="#promise">promise</a></em> be a new <code><a href="#promise">Promise</a></code> object and <em>resolver</em> its associated resolver.
+                Let <em><a href="#promise">promise</a></em> be a new <code>
+                <a href="#promise">Promise</a></code> object and
+                <em>resolver</em> its associated resolver.
               </li>
               <li>
-                Return <em><a href="#promise">promise</a></em> and run the remaining steps asynchronously.
+                Return <em><a href="#promise">promise</a></em> and run the
+                remaining steps asynchronously.
               </li>
               <li>
-                If an error occurs, run these substeps and then terminate these steps:
+                If an error occurs, run these substeps and then terminate these
+                steps:
                 <ol>
                   <li>
-                    Let <em>error</em> be a new <code>DOMError</code> object whose name is <code>"UnknownError"</code>,
+                    Let <em>error</em> be a new <code>DOMError</code> object
+                    whose name is <code>"UnknownError"</code>,
                   </li>
                   <li>
-                    Run <em>resolver</em>'s internal <em>reject</em> algorithm with <em>error</em> as <code>value</code>.
+                    Run <em>resolver</em>'s internal <em>reject</em> algorithm
+                    with <em>error</em> as <code>value</code>.
                   </li>
                 </ol>
               </li>
@@ -105,10 +163,13 @@
                 If the operation successfully completes, run these substeps:
                 <ol>
                   <li>
-                    Let <em>data</em> be a new object for the specified device information (e.g. <a>DeviceCPU</a>, <a>DeviceStorage</a> and <a >DeviceDisplay</a>) that were retrieved, 
+                    Let <em>data</em> be a new object for the specified device
+                    information (e.g. <a>DeviceCPU</a>, <a>DeviceStorage</a>
+                    and <a >DeviceDisplay</a>) that were retrieved,
                   </li>
                   <li>
-                    Run <em>resolver</em>'s intenal <code>fulfill</code> algorithm with <em>data</em> as <code>value</code>.
+                    Run <em>resolver</em>'s intenal <code>fulfill</code>
+                    algorithm with <em>data</em> as <code>value</code>.
                   </li>
                 </ol>
               </li>
@@ -116,7 +177,8 @@
           </p>
           <dl title="interface DeviceCapabilities" class='idl'>
             <dt><a>Promise</a> getCapabilities()</dt>
-            <dd>Retrieve the hardware capabilities supported by the underlying system on which the Web application is running. </dd>
+            <dd>Retrieve the hardware capabilities supported by the underlying
+                system on which the Web application is running. </dd>
             <dt>Promise getCPUInfo()</dt>
             <dd>Retrieve the specific information for CPU</dd>
             <dt>Promise getMemoryInfo()</dt>
@@ -134,7 +196,10 @@
       <section>
         <h2>Profile</h2>
         <section>
-          <p><a>DeviceCapabilityProfile</a> acts as a feature supported matrix indicating the capabilities supported by the system.</p>
+          <p>
+            <a>DeviceCapabilityProfile</a> acts as a feature supported matrix
+            indicating the capabilities supported by the system.
+          </p>
           <dl title="interface DeviceCapabilityProfile" class='idl'>
             <dt>readonly attribute boolean bluetooth</dt>
             <dd>Indicate whether the device supports Bluetooth.</dd>
@@ -147,33 +212,45 @@
             <dt>readonly attribute boolean wifiDirect</dt>
             <dd>Indicate whether the device supports wifiDirect.</dd>
             <dt>readonly attribute boolean camera</dt>
-            <dd>Indicate whether the device has a camera. Should be always true if any of <a>cameraFront</a> or <a>cameoBack</a> is true</a>.</dd>
+            <dd>Indicate whether the device has a camera. Should be always true
+               if any of <a>cameraFront</a> or <a>cameoBack</a> is true</a>.</dd>
             <dt>readonly attribute boolean cameraFront</dt>
-            <dd>Indicate whether the device has a front camera. The facing of front camera is the same of that of screen.</dd>
+            <dd>Indicate whether the device has a front camera. The facing of
+                front camera is the same of that of screen.</dd>
             <dt>readonly attribute boolean cameraBack</dt>
-            <dd>Indicate whether the device has a back camera. The facing of back camera is opposite to that of screen.</dd>
+            <dd>Indicate whether the device has a back camera. The facing of
+                back camera is opposite to that of screen.</dd>
             <dt>readonly attribute boolean locationGps</dt>
-            <dd>Indicate whether the device supports GPS based positioning feature.</dd>
+            <dd>Indicate whether the device supports GPS based positioning
+                feature.</dd>
             <dt>readonly attribute boolean locationWps</dt>
-            <dd>Indicate whether the device supports WiFi based positioning feature.</dd>
+            <dd>Indicate whether the device supports WiFi based positioning
+                feature.</dd>
             <dt>readonly attribute boolean microphone</dt>
             <dd>Indicate whether the device has a microphone.</dd>
             <dt>readonly attribute boolean accelerometer</dt>
             <dd>Indicate whether the device supports measuring acceleration.</dd>
             <dt>readonly attribute boolean barometer</dt>
-            <dd>Indicate whether the device supports measuring atmospheric pressure.</dd>
+            <dd>Indicate whether the device supports measuring atmospheric
+                pressure.</dd>
             <dt>readonly attribute boolean gyroscope</dt>
-            <dd>Indicate whether the device supports gyroscope for rotation detection.</dd>
+            <dd>Indicate whether the device supports gyroscope for rotation
+                detection.</dd>
             <dt>readonly attribute boolean magnetometer</dt>
-            <dd>Indicate whether the device support measuring the strength of magnetic field.</dd>
+            <dd>Indicate whether the device support measuring the strength of
+                magnetic field.</dd>
             <dt>readonly attribute boolean gravimeter</dt>
-            <dd>Indicate whether the device supports measuring variations in the gravitational field of the earth.</dd>
+            <dd>Indicate whether the device supports measuring variations in the
+                gravitational field of the earth.</dd>
             <dt>readonly attribute boolean photometer</dt>
-            <dd>Indicate whether the device supports measuring the luminous intensity.</dd>
+            <dd>Indicate whether the device supports measuring the luminous
+                intensity.</dd>
             <dt>readonly attribute boolean proximity</dt>
-            <dd>Indicate whether the device supports measuring the property of being close.</dd>
+            <dd>Indicate whether the device supports measuring the property of
+                being close.</dd>
             <dt>readonly attribute boolean tiltmeter</dt>
-            <dd>Indicate whether the device supports measuring linear acceleration.</dd>  
+            <dd>Indicate whether the device supports measuring linear
+                acceleration.</dd>
           </dl>
         </section>
       </section>
