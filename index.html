@@ -36,6 +36,12 @@
     </script>
   </head>
   <body>
+    <section class='issue'>
+      It might be better to divide each device capability into a separate API
+      spec, like <a href="http://www.w3.org/TR/battery-status/">Battery Status
+      API</a> does. Putting so many API categories into one spec would make it
+      hard to be reviewed and identify the real usage scenarios.
+    </section>
     <section id='abstract'>
       This specification defines a set of System Level APIs to allow Web
       applications retrieve the status of the device capabilities supported and
@@ -278,25 +284,74 @@
         <section>
           <dl title="interface DeviceStorage" class='idl'>
             <dt>readonly attribute <a>DeviceStorageUnit</a> storages[]</dt>
+            <dd>An array of <a>DdeviceStorageUnit</a> objects</dd>
+            <dt>attribute <a>EventHandler</a> onattach</dt>
+            <dd>Fired when a new storage is attached to the system. The parameter
+              passed to the event handler is the <a>DeviceStorageUnit</a> being
+              connected to the system.</dd>
+            <dt>attribute <a>EventHandler</a> ondetach</dt>
+            <dd>Fired when a new storage is detached to the system. The parameter
+              passed to the event handler is the <a>DeviceStorageUnit</a> being
+              disconnected to the system.</dd>
           </dl>
         </section>
         <section>
-          <h2><a>DeviceStorageUnit</a> interface<h2>
-          <dl title="interface DeviceStorageUnit" class='idl'>
-          </dl>
+          <h2><a>DeviceStorageUnit</a> interface</h2>
+          <section>
+            <dl title="interface DeviceStorageUnit" class='idl'>
+              <dt>attribute readonly DOMString id</dt>
+              <dd>The unique identifier of the storage device</dd>
+              <dt>attribute readonly DOMString name</dt>
+              <dd>The human-readable name</dd>
+              <dt>attribute readonly DOMString type</dt>
+              <dd>The type of storage device, should be one of 'fixed',
+                  'removable', 'unknown' </dd>
+              <dt>attribute readonly double capacity</dt>
+              <dd>The total capacity of the storage devices, in bytes</dd>
+            </dl>
+         </section>
         </section>
       </section>
       <section>
         <h2>Display</h2>
         <section>
-          <dl title="interface DeviceDisplay" class='idl'>
+          <dl title="interface DeviceDisplay : EventTarget" class='idl'>
             <dt>readonly attribute <a>DeviceDisplayUnit</a> displays[]</dt>
+            <dd>An array of <a>DeviceDisplayUnit</a> objects</dd>
+            <dt>attribute <a>EventHandler</a> onconnect</dt>
+            <dd>Fired when a new display is connected to the system. The parameter
+              passed to the event handler is a <DeviceDisplayUnit> object being
+              connected to the system.
+            </dd>
+            <dt>attribute <a>EventHandler</a> ondisconnect</dt>
+            <dd>Fired when a display is removed from the system. The parameter
+              passed to the event handler is a <DeviceDisplayUnit> object being
+              connected to the system.</dd>
           </dl>
         </section>
         <section>
           <h2><a>DeviceDisplayUnit</a> interface<h2>
           <dl title="interface DeviceDisplayUnit" class='idl'>
-
+            <dt>attribute readonly DOMString id</dt>
+            <dd>The unique identifier of the display.</dd>
+            <dt>attribute readonly DOMString name</dt>
+            <dd>The user-friendly name (e.g. "HP LCD monitor").</dd>
+            <dt>attribute readonly boolean isPrimary</dt>
+            <dd>True if this is the primary display.</dd>
+            <dt>attribute readonly boolean isInternal</dt>
+            <dd>True if this is an internal display. </dd>
+            <dt>attribute readonly unsigned int dpiX</dt>
+            <dd>The number of pixels per inch along the x-axis</dd>
+            <dt>attribute readonly unsigned int dpiY</dt>
+            <dd>The number of pixels per inch along the y-axis</dd>
+            <dt>attribute readonly unsigned long width</dt>
+            <dd>The total number of addressable pixels along the x-axis.</dd>
+            <dt>attribute readonly unsigned long height</dt>
+            <dd>The total number of addressable pixels along the y-axis.</dd>
+            <dt>attribute readonly unsigned long availWidth</dt>
+            <dd>The adjusted width to exclude the window decor if have, in pixels</dd>
+            <dt>attribute readonly unsigned long availHeight</dt>
+            <dd>The adjusted height to exclude th window decor if have, in pixels</dd>
           </dl>
         </section>
       </section>
