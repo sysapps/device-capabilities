@@ -1,9 +1,13 @@
 <!DOCTYPE html>
 <html xmlns='http://www.w3.org/1999/xhtml'>
   <head>
-    <meta http-equiv="Content-Type" content="text/html;charset=utf-8"/>
-    <title>Device Capabilities API </title>
-    <script src='https://www.w3.org/Tools/respec/respec-w3c-common' async class='remove'></script>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>
+      Device Capabilities API
+    </title>
+    <script src='https://www.w3.org/Tools/respec/respec-w3c-common' async=""
+    class='remove'>
+</script>
     <script class='remove'>
       var respecConfig = {
               specStatus:          "ED"
@@ -51,61 +55,58 @@
       <p>
         This document is intended to define the Device Capabilities API to
         retrieve the status of hardware device, get the value of selected
-        properties, and subscribe to asynchronous notifications of some specific
-        properties in Web applications. To avoid pushing an over-complicated and
-        overlapped API definitions, it firstly focuses on some general device
-        capabilities, like CPU, memory, storage and display and so on. This
-        specification is easy to be extended for supporting a new device
-        capability during API evolution.
+        properties, and subscribe to asynchronous notifications of some
+        specific properties in Web applications. To avoid pushing an
+        over-complicated and overlapped API definitions, it firstly focuses on
+        some general device capabilities, like CPU, memory, storage and display
+        and so on. This specification is easy to be extended for supporting a
+        new device capability during API evolution.
       </p>
       <p>
         Note that this specification doesn't attempt to re-define device APIs
-        which are already officially published by W3C working group.
-        For example,
-        <a href="http://www.w3.org/TR/battery-status/">
-          Battery Status API
-        </a>,
-        <a href="http://www.w3.org/TR/netinfo-api/">
-          Network Information API
-        </a>, and
-        <a href="http://www.w3.org/TR/screen-orientation/">
-          Screen Orientation API
-        </a>. If the published device API specification cannot satisfy the
+        which are already officially published by W3C working group. For
+        example, <a href="http://www.w3.org/TR/battery-status/">Battery Status
+        API</a> , <a href="http://www.w3.org/TR/netinfo-api/">Network
+        Information API</a> , and <a href=
+        "http://www.w3.org/TR/screen-orientation/">Screen Orientation API</a> .
+        If the published device API specification cannot satisfy the
         requirements, the right way is to consider how to extend it.
       </p>
     </section>
     <section class="informative">
-      <h2>Introduction</h2>
-      <p></p>
+      <h2>
+        Introduction
+      </h2>
       <p>
         The Device Capabilities API provides web apps a way to retrieve device
         and system information from the underlying operating system. Device
         capabilities vary a great deal across the wide range of devices
-        applications run on.  This API lets applications take advantage of the
+        applications run on. This API lets applications take advantage of the
         capabilities of the device the application is running on. For example,
         knowing the number of CPU cores allows Web applications to determine an
         appropriate number of Web Workers to create for a worker pool for a
         compute intensive task. Knowing which sensors are supported, allows an
         application to know it can use these sensors to provide an alternative
-        means of user input, perhaps by moving the device.  It is often the case
-        that other APIs let an application detect capabilities one by one through
-        testing, but this is too slow for quickly determining the initial
-        presentation to the user.
+        means of user input, perhaps by moving the device. It is often the case
+        that other APIs let an application detect capabilities one by one
+        through testing, but this is too slow for quickly determining the
+        initial presentation to the user.
       </p>
     </section>
-    <section id="conformance">
-    </section>
+    <section id="conformance"></section>
     <section>
-      <h2>Security and Privacy Considerations</h2>
+      <h2>
+        Security and Privacy Considerations
+      </h2>
       <p>
-       A Web application using this API is granted to access some device
-       specific data which may contain information that is treated as private
-       by end-user. For instance a user may become sensitive to a Web
-       application retrieve the available storage free space. Therefore,
-       a conforming implementation of this specification MUST provide a
-       mechanism that protects the user's privacy and this mechanism should
-       ensure that no information exposed by this API is retrievable without
-       the permission granted.
+        A Web application using this API is granted to access some device
+        specific data which may contain information that is treated as private
+        by end-user. For instance a user may become sensitive to a Web
+        application retrieve the available storage free space. Therefore, a
+        conforming implementation of this specification MUST provide a
+        mechanism that protects the user's privacy and this mechanism should
+        ensure that no information exposed by this API is retrievable without
+        the permission granted.
       </p>
     </section>
     <section>
@@ -118,7 +119,9 @@
           <a>Navigator</a> object.
         </p>
         <dl title="partial interface Navigator" class="idl">
-          <dt>readonly attribute DeviceCapabilities system</dt>
+          <dt>
+            readonly attribute DeviceCapabilities system
+          </dt>
           <dd>
             The object that exposes the device capabilities retrieval
             functionality.
@@ -126,238 +129,461 @@
         </dl>
         <section>
           <p>
-            <a>DeviceCapabilities</a> interface encapsulates a set of methods to
-            retrieve the hardware capabilities and specific device data, e.g.
-            CPU, storage and display, and event handler to register asynchronous
-            notification when the interested system events are triggered.
+            <a>DeviceCapabilities</a> interface encapsulates a set of methods
+            to retrieve the hardware capabilities and specific device data,
+            e.g. CPU, storage and display, and event handler to register
+            asynchronous notification when the interested system events are
+            triggered.
           </p>
           <p>
-            The methods defined in <a>DeviceCapabilities</a>are designed to
-            return a
-            <dfn id="promise"><code>
-              <a href="http://dom.spec.whatwg.org/#promise">Promise</a></code>
-            </dfn> object and follow a specific pattern when invoked:
-            <ol>
-              <li>
-                Make a request to the system to retrieve the specified
-                information implied by the method name;
-              </li>
-              <li>
-                Let <em><a href="#promise">promise</a></em> be a new <code>
-                <a href="#promise">Promise</a></code> object and
-                <em>resolver</em> its associated resolver.
-              </li>
-              <li>
-                Return <em><a href="#promise">promise</a></em> and run the
-                remaining steps asynchronously.
-              </li>
-              <li>
-                If an error occurs, run these substeps and then terminate these
-                steps:
-                <ol>
-                  <li>
-                    Let <em>error</em> be a new <code>DOMError</code> object
-                    whose name is <code>"UnknownError"</code>,
-                  </li>
-                  <li>
-                    Run <em>resolver</em>'s internal <em>reject</em> algorithm
-                    with <em>error</em> as <code>value</code>.
-                  </li>
-                </ol>
-              </li>
-              <li>
-                If the operation successfully completes, run these substeps:
-                <ol>
-                  <li>
-                    Let <em>data</em> be a new object for the specified device
-                    information (e.g. <a>DeviceCPU</a>, <a>DeviceStorage</a>
-                    and <a >DeviceDisplay</a>) that were retrieved,
-                  </li>
-                  <li>
-                    Run <em>resolver</em>'s intenal <code>fulfill</code>
-                    algorithm with <em>data</em> as <code>value</code>.
-                  </li>
-                </ol>
-              </li>
-            </ol>
+            The methods defined in <a>DeviceCapabilities</a> are designed to
+            return a <dfn id="promise"><code><a href=
+            "http://dom.spec.whatwg.org/#promise">Promise</a></code></dfn>
+            object and follow a specific pattern when invoked:
           </p>
+          <ol>
+            <li>Make a request to the system to retrieve the specified
+            information implied by the method name;
+            </li>
+            <li>Let <em><a href="#promise">promise</a></em> be a new
+            <code><a href="#promise">Promise</a></code> object and
+            <em>resolver</em> its associated resolver.
+            </li>
+            <li>Return <em><a href="#promise">promise</a></em> and run the
+            remaining steps asynchronously.
+            </li>
+            <li>If an error occurs, run these substeps and then terminate these
+            steps:
+              <ol>
+                <li>Let <em>error</em> be a new <code>DOMError</code> object
+                whose name is <code>"UnknownError"</code>,
+                </li>
+                <li>Run <em>resolver</em>'s internal <em>reject</em> algorithm
+                with <em>error</em> as <code>value</code>.
+                </li>
+              </ol>
+            </li>
+            <li>If the operation successfully completes, run these substeps:
+              <ol>
+                <li>Let <em>data</em> be a new object for the specified device
+                information (e.g. <a>DeviceCPU</a>, <a>DeviceStorage</a> and
+                <a>DeviceDisplay</a>) that were retrieved,
+                </li>
+                <li>Run <em>resolver</em>'s intenal <code>fulfill</code>
+                algorithm with <em>data</em> as <code>value</code>.
+                </li>
+              </ol>
+            </li>
+          </ol>
           <dl title="interface DeviceCapabilities" class='idl'>
-            <dt><a>Promise</a> getCapabilities()</dt>
-            <dd>Retrieve the hardware capabilities supported by the underlying
-                system on which the Web application is running. </dd>
-            <dt>Promise getCPUInfo()</dt>
-            <dd>Retrieve the specific information for CPU</dd>
-            <dt>Promise getMemoryInfo()</dt>
-            <dd>Retrieve the memory information</dd>
-            <dt>Promise getStorageInfo()</dt>
-            <dd>Retrieve the storage information</dd>
-            <dt>Promise getDisplayInfo()</dt>
-            <dd>Retrieve the display information</dd>
+            <dt>
+              <a>Promise</a> getCapabilities()
+            </dt>
+            <dd>
+              Retrieve the hardware capabilities supported by the underlying
+              system on which the Web application is running.
+            </dd>
+            <dt>
+              Promise getCPUInfo()
+            </dt>
+            <dd>
+              Retrieve the specific information for CPU
+            </dd>
+            <dt>
+              Promise getMemoryInfo()
+            </dt>
+            <dd>
+              Retrieve the memory information
+            </dd>
+            <dt>
+              Promise getStorageInfo()
+            </dt>
+            <dd>
+              Retrieve the storage information
+            </dd>
+            <dt>
+              Promise getDisplayInfo()
+            </dt>
+            <dd>
+              Retrieve the display information
+            </dd>
           </dl>
         </section>
       </section>
     </section>
     <section>
-      <h2>Device Capabilities Properties</h2>
+      <h2>
+        Device Capabilities Properties
+      </h2>
       <section>
-        <h2>Profile</h2>
+        <h2>
+          Profile
+        </h2>
         <section>
           <p>
             <a>DeviceCapabilityProfile</a> acts as a feature supported matrix
             indicating the capabilities supported by the system.
           </p>
+          <section class='issue'>
+            The current list of capabilities is provisional and is subject to
+            change. The <a>DeviceCapabilityProfile</a> interface should expose
+            capabilities that cannot be reliably feature detected and have use
+            cases. See also the <a href=
+            "http://www.w3.org/html/wg/drafts/html/CR/webappapis.html#system-state-and-capabilities">
+            system state and capabilities</a> for capabilities defined in
+            [[HTML5]].
+          </section>
           <dl title="interface DeviceCapabilityProfile" class='idl'>
-            <dt>readonly attribute boolean bluetooth</dt>
-            <dd>Indicate whether the device supports Bluetooth.</dd>
-            <dt>readonly attribute boolean nfc</dt>
-            <dd>Indicate whether the device supports Near Filed Communication.</dd>
-            <dt>readonly attribute unsigned int multiTouchCount</dt>
-            <dd>Indicate how many touch points supported by the device.</dd>
-            <dt>readonly attribute boolean wifi</dt>
-            <dd>Indicate whether the device supports WiFi network connection.</dd>
-            <dt>readonly attribute boolean wifiDirect</dt>
-            <dd>Indicate whether the device supports wifiDirect.</dd>
-            <dt>readonly attribute boolean camera</dt>
-            <dd>Indicate whether the device has a camera. Should be always true
-               if any of <a>cameraFront</a> or <a>cameoBack</a> is true</a>.</dd>
-            <dt>readonly attribute boolean cameraFront</dt>
-            <dd>Indicate whether the device has a front camera. The facing of
-                front camera is the same of that of screen.</dd>
-            <dt>readonly attribute boolean cameraBack</dt>
-            <dd>Indicate whether the device has a back camera. The facing of
-                back camera is opposite to that of screen.</dd>
-            <dt>readonly attribute boolean locationGps</dt>
-            <dd>Indicate whether the device supports GPS based positioning
-                feature.</dd>
-            <dt>readonly attribute boolean locationWps</dt>
-            <dd>Indicate whether the device supports WiFi based positioning
-                feature.</dd>
-            <dt>readonly attribute boolean microphone</dt>
-            <dd>Indicate whether the device has a microphone.</dd>
-            <dt>readonly attribute boolean accelerometer</dt>
-            <dd>Indicate whether the device supports measuring acceleration.</dd>
-            <dt>readonly attribute boolean barometer</dt>
-            <dd>Indicate whether the device supports measuring atmospheric
-                pressure.</dd>
-            <dt>readonly attribute boolean gyroscope</dt>
-            <dd>Indicate whether the device supports gyroscope for rotation
-                detection.</dd>
-            <dt>readonly attribute boolean magnetometer</dt>
-            <dd>Indicate whether the device support measuring the strength of
-                magnetic field.</dd>
-            <dt>readonly attribute boolean gravimeter</dt>
-            <dd>Indicate whether the device supports measuring variations in the
-                gravitational field of the earth.</dd>
-            <dt>readonly attribute boolean photometer</dt>
-            <dd>Indicate whether the device supports measuring the luminous
-                intensity.</dd>
-            <dt>readonly attribute boolean proximity</dt>
-            <dd>Indicate whether the device supports measuring the property of
-                being close.</dd>
-            <dt>readonly attribute boolean tiltmeter</dt>
-            <dd>Indicate whether the device supports measuring linear
-                acceleration.</dd>
+            <dt>
+              readonly attribute boolean bluetooth
+            </dt>
+            <dd>
+              Indicate whether the device supports Bluetooth.
+            </dd>
+            <dt>
+              readonly attribute boolean nfc
+            </dt>
+            <dd>
+              Indicate whether the device supports Near Filed Communication.
+            </dd>
+            <dt>
+              readonly attribute unsigned int multiTouchCount
+            </dt>
+            <dd>
+              Indicate how many touch points supported by the device.
+            </dd>
+            <dt>
+              readonly attribute boolean wifi
+            </dt>
+            <dd>
+              Indicate whether the device supports WiFi network connection.
+            </dd>
+            <dt>
+              readonly attribute boolean wifiDirect
+            </dt>
+            <dd>
+              Indicate whether the device supports wifiDirect.
+            </dd>
+            <dt>
+              readonly attribute boolean camera
+            </dt>
+            <dd>
+              Indicate whether the device has a camera. Should be always true
+              if any of <a>cameraFront</a> or <a>cameoBack</a> is true.
+            </dd>
+            <dt>
+              readonly attribute boolean cameraFront
+            </dt>
+            <dd>
+              Indicate whether the device has a front camera. The facing of
+              front camera is the same of that of screen.
+            </dd>
+            <dt>
+              readonly attribute boolean cameraBack
+            </dt>
+            <dd>
+              Indicate whether the device has a back camera. The facing of back
+              camera is opposite to that of screen.
+            </dd>
+            <dt>
+              readonly attribute boolean locationGps
+            </dt>
+            <dd>
+              Indicate whether the device supports GPS based positioning
+              feature.
+            </dd>
+            <dt>
+              readonly attribute boolean locationWps
+            </dt>
+            <dd>
+              Indicate whether the device supports WiFi based positioning
+              feature.
+            </dd>
+            <dt>
+              readonly attribute boolean microphone
+            </dt>
+            <dd>
+              Indicate whether the device has a microphone.
+            </dd>
+            <dt>
+              readonly attribute boolean accelerometer
+            </dt>
+            <dd>
+              Indicate whether the device supports measuring acceleration.
+            </dd>
+            <dt>
+              readonly attribute boolean barometer
+            </dt>
+            <dd>
+              Indicate whether the device supports measuring atmospheric
+              pressure.
+            </dd>
+            <dt>
+              readonly attribute boolean gyroscope
+            </dt>
+            <dd>
+              Indicate whether the device supports gyroscope for rotation
+              detection.
+            </dd>
+            <dt>
+              readonly attribute boolean magnetometer
+            </dt>
+            <dd>
+              Indicate whether the device support measuring the strength of
+              magnetic field.
+            </dd>
+            <dt>
+              readonly attribute boolean gravimeter
+            </dt>
+            <dd>
+              Indicate whether the device supports measuring variations in the
+              gravitational field of the earth.
+            </dd>
+            <dt>
+              readonly attribute boolean photometer
+            </dt>
+            <dd>
+              Indicate whether the device supports measuring the luminous
+              intensity.
+            </dd>
+            <dt>
+              readonly attribute boolean proximity
+            </dt>
+            <dd>
+              Indicate whether the device supports measuring the property of
+              being close.
+            </dd>
+            <dt>
+              readonly attribute boolean tiltmeter
+            </dt>
+            <dd>
+              Indicate whether the device supports measuring linear
+              acceleration.
+            </dd>
           </dl>
         </section>
       </section>
       <section>
-        <h2>CPU</h2>
+        <h2>
+          CPU
+        </h2>
+        <section class='issue'>
+          Events will probably work better for properties that change their
+          values frequently (e.g. <code>load</code> and
+          <code>availableCapacity</code>).
+        </section>
         <section>
           <dl title="interface DeviceCPU" class='idl'>
-            <dt>readonly attribute unsigned int numOfProcessors</dt>
-            <dt>readonly attribute DOMString archName</dt>
-            <dt>readonly attribute float load</dt>
+            <dt>
+              readonly attribute unsigned int numOfProcessors
+            </dt>
+            <dd>
+              TODO
+            </dd>
+            <dt>
+              readonly attribute DOMString archName
+            </dt>
+            <dd>
+              TODO
+            </dd>
+            <dt>
+              readonly attribute float load
+            </dt>
+            <dd>
+              TODO
+            </dd>
           </dl>
         </section>
       </section>
       <section>
-        <h2>Memory</h2>
+        <h2>
+          Memory
+        </h2>
         <section>
           <dl title="interface DeviceMemory" class='idl'>
-            <dt>readonly attribute unsigned long capacity</dt>
-            <dt>readonly attribute unsigend long availableCapacity</dt>
+            <dt>
+              readonly attribute unsigned long capacity
+            </dt>
+            <dd>
+              TODO
+            </dd>
+            <dt>
+              readonly attribute unsigend long availableCapacity
+            </dt>
+            <dd>
+              TODO
+            </dd>
           </dl>
         </section>
       </section>
       <section>
-        <h2>Storage</h2>
+        <h2>
+          Storage
+        </h2>
         <section>
           <dl title="interface DeviceStorage" class='idl'>
-            <dt>readonly attribute <a>DeviceStorageUnit</a> storages[]</dt>
-            <dd>An array of <a>DdeviceStorageUnit</a> objects</dd>
-            <dt>attribute <a>EventHandler</a> onattach</dt>
-            <dd>Fired when a new storage is attached to the system. The parameter
+            <dt>
+              readonly attribute <a>DeviceStorageUnit[]</a> storages
+            </dt>
+            <dd>
+              An array of <a>DdeviceStorageUnit</a> objects
+            </dd>
+            <dt>
+              attribute <a>EventHandler</a> onattach
+            </dt>
+            <dd>
+              Fired when a new storage is attached to the system. The parameter
               passed to the event handler is the <a>DeviceStorageUnit</a> being
-              connected to the system.</dd>
-            <dt>attribute <a>EventHandler</a> ondetach</dt>
-            <dd>Fired when a new storage is detached to the system. The parameter
+              connected to the system.
+            </dd>
+            <dt>
+              attribute <a>EventHandler</a> ondetach
+            </dt>
+            <dd>
+              Fired when a new storage is detached to the system. The parameter
               passed to the event handler is the <a>DeviceStorageUnit</a> being
-              disconnected to the system.</dd>
+              disconnected to the system.
+            </dd>
           </dl>
         </section>
         <section>
-          <h2><a>DeviceStorageUnit</a> interface</h2>
+          <h2>
+            <a>DeviceStorageUnit</a> interface
+          </h2>
           <section>
             <dl title="interface DeviceStorageUnit" class='idl'>
-              <dt>attribute readonly DOMString id</dt>
-              <dd>The unique identifier of the storage device</dd>
-              <dt>attribute readonly DOMString name</dt>
-              <dd>The human-readable name</dd>
-              <dt>attribute readonly DOMString type</dt>
-              <dd>The type of storage device, should be one of 'fixed',
-                  'removable', 'unknown' </dd>
-              <dt>attribute readonly double capacity</dt>
-              <dd>The total capacity of the storage devices, in bytes</dd>
+              <dt>
+                attribute readonly DOMString id
+              </dt>
+              <dd>
+                The unique identifier of the storage device
+              </dd>
+              <dt>
+                attribute readonly DOMString name
+              </dt>
+              <dd>
+                The human-readable name
+              </dd>
+              <dt>
+                attribute readonly DOMString type
+              </dt>
+              <dd>
+                The type of storage device, should be one of 'fixed',
+                'removable', 'unknown'
+              </dd>
+              <dt>
+                attribute readonly double capacity
+              </dt>
+              <dd>
+                The total capacity of the storage devices, in bytes
+              </dd>
             </dl>
-         </section>
+          </section>
         </section>
       </section>
       <section>
-        <h2>Display</h2>
+        <h2>
+          Display
+        </h2>
         <section>
           <dl title="interface DeviceDisplay : EventTarget" class='idl'>
-            <dt>readonly attribute <a>DeviceDisplayUnit</a> displays[]</dt>
-            <dd>An array of <a>DeviceDisplayUnit</a> objects</dd>
-            <dt>attribute <a>EventHandler</a> onconnect</dt>
-            <dd>Fired when a new display is connected to the system. The parameter
-              passed to the event handler is a <DeviceDisplayUnit> object being
-              connected to the system.
+            <dt>
+              readonly attribute <a>DeviceDisplayUnit[]</a> displays
+            </dt>
+            <dd>
+              An array of <a>DeviceDisplayUnit</a> objects
             </dd>
-            <dt>attribute <a>EventHandler</a> ondisconnect</dt>
-            <dd>Fired when a display is removed from the system. The parameter
-              passed to the event handler is a <DeviceDisplayUnit> object being
-              connected to the system.</dd>
+            <dt>
+              attribute <a>EventHandler</a> onconnect
+            </dt>
+            <dd>
+              Fired when a new display is connected to the system. The
+              parameter passed to the event handler is a
+              <a>DeviceDisplayUnit</a> object being connected to the system.
+            </dd>
+            <dt>
+              attribute <a>EventHandler</a> ondisconnect
+            </dt>
+            <dd>
+              Fired when a display is removed from the system. The parameter
+              passed to the event handler is a <a>DeviceDisplayUnit</a> object
+              being connected to the system.
+            </dd>
           </dl>
         </section>
         <section>
-          <h2><a>DeviceDisplayUnit</a> interface<h2>
+          <h2>
+            <a>DeviceDisplayUnit</a> interface
+          </h2>
           <dl title="interface DeviceDisplayUnit" class='idl'>
-            <dt>attribute readonly DOMString id</dt>
-            <dd>The unique identifier of the display.</dd>
-            <dt>attribute readonly DOMString name</dt>
-            <dd>The user-friendly name (e.g. "HP LCD monitor").</dd>
-            <dt>attribute readonly boolean isPrimary</dt>
-            <dd>True if this is the primary display.</dd>
-            <dt>attribute readonly boolean isInternal</dt>
-            <dd>True if this is an internal display. </dd>
-            <dt>attribute readonly unsigned int dpiX</dt>
-            <dd>The number of pixels per inch along the x-axis</dd>
-            <dt>attribute readonly unsigned int dpiY</dt>
-            <dd>The number of pixels per inch along the y-axis</dd>
-            <dt>attribute readonly unsigned long width</dt>
-            <dd>The total number of addressable pixels along the x-axis.</dd>
-            <dt>attribute readonly unsigned long height</dt>
-            <dd>The total number of addressable pixels along the y-axis.</dd>
-            <dt>attribute readonly unsigned long availWidth</dt>
-            <dd>The adjusted width to exclude the window decor if have, in pixels</dd>
-            <dt>attribute readonly unsigned long availHeight</dt>
-            <dd>The adjusted height to exclude th window decor if have, in pixels</dd>
+            <dt>
+              attribute readonly DOMString id
+            </dt>
+            <dd>
+              The unique identifier of the display.
+            </dd>
+            <dt>
+              attribute readonly DOMString name
+            </dt>
+            <dd>
+              The user-friendly name (e.g. "HP LCD monitor").
+            </dd>
+            <dt>
+              attribute readonly boolean isPrimary
+            </dt>
+            <dd>
+              True if this is the primary display.
+            </dd>
+            <dt>
+              attribute readonly boolean isInternal
+            </dt>
+            <dd>
+              True if this is an internal display.
+            </dd>
+            <dt>
+              attribute readonly unsigned int dpiX
+            </dt>
+            <dd>
+              The number of pixels per inch along the x-axis
+            </dd>
+            <dt>
+              attribute readonly unsigned int dpiY
+            </dt>
+            <dd>
+              The number of pixels per inch along the y-axis
+            </dd>
+            <dt>
+              attribute readonly unsigned long width
+            </dt>
+            <dd>
+              The total number of addressable pixels along the x-axis.
+            </dd>
+            <dt>
+              attribute readonly unsigned long height
+            </dt>
+            <dd>
+              The total number of addressable pixels along the y-axis.
+            </dd>
+            <dt>
+              attribute readonly unsigned long availWidth
+            </dt>
+            <dd>
+              The adjusted width to exclude the window decor if have, in pixels
+            </dd>
+            <dt>
+              attribute readonly unsigned long availHeight
+            </dt>
+            <dd>
+              The adjusted height to exclude th window decor if have, in pixels
+            </dd>
           </dl>
         </section>
       </section>
     </section>
     <section>
-      <h2>Requirements & Use Case</h2>
+      <h2>
+        Requirements &amp; Use Case
+      </h2>
     </section>
   </body>
 </html>
