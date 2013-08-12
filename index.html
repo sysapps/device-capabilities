@@ -76,7 +76,6 @@
     </section>
     <section class="informative">
       <h2>Introduction</h2>
-      <p></p>
       <p>
         The Device Capabilities API provides web apps a way to retrieve device
         and system information from the underlying operating system. Device
@@ -132,11 +131,12 @@
             notification when the interested system events are triggered.
           </p>
           <p>
-            The methods defined in <a>DeviceCapabilities</a>are designed to
+            The methods defined in <a>DeviceCapabilities</a> are designed to
             return a
             <dfn id="promise"><code>
               <a href="http://dom.spec.whatwg.org/#promise">Promise</a></code>
             </dfn> object and follow a specific pattern when invoked:
+          </p>
             <ol>
               <li>
                 Make a request to the system to retrieve the specified
@@ -180,7 +180,6 @@
                 </ol>
               </li>
             </ol>
-          </p>
           <dl title="interface DeviceCapabilities" class='idl'>
             <dt><a>Promise</a> getCapabilities()</dt>
             <dd>Retrieve the hardware capabilities supported by the underlying
@@ -219,7 +218,7 @@
             <dd>Indicate whether the device supports wifiDirect.</dd>
             <dt>readonly attribute boolean camera</dt>
             <dd>Indicate whether the device has a camera. Should be always true
-               if any of <a>cameraFront</a> or <a>cameoBack</a> is true</a>.</dd>
+               if any of <a>cameraFront</a> or <a>cameoBack</a> is true.</dd>
             <dt>readonly attribute boolean cameraFront</dt>
             <dd>Indicate whether the device has a front camera. The facing of
                 front camera is the same of that of screen.</dd>
@@ -265,8 +264,11 @@
         <section>
           <dl title="interface DeviceCPU" class='idl'>
             <dt>readonly attribute unsigned int numOfProcessors</dt>
+            <dd>TODO</dd>
             <dt>readonly attribute DOMString archName</dt>
+            <dd>TODO</dd>
             <dt>readonly attribute float load</dt>
+            <dd>TODO</dd>
           </dl>
         </section>
       </section>
@@ -275,7 +277,9 @@
         <section>
           <dl title="interface DeviceMemory" class='idl'>
             <dt>readonly attribute unsigned long capacity</dt>
+            <dd>TODO</dd>
             <dt>readonly attribute unsigend long availableCapacity</dt>
+            <dd>TODO</dd>
           </dl>
         </section>
       </section>
@@ -320,17 +324,17 @@
             <dd>An array of <a>DeviceDisplayUnit</a> objects</dd>
             <dt>attribute <a>EventHandler</a> onconnect</dt>
             <dd>Fired when a new display is connected to the system. The parameter
-              passed to the event handler is a <DeviceDisplayUnit> object being
-              connected to the system.
+              passed to the event handler is a <a>DeviceDisplayUnit</a> object
+              being connected to the system.
             </dd>
             <dt>attribute <a>EventHandler</a> ondisconnect</dt>
             <dd>Fired when a display is removed from the system. The parameter
-              passed to the event handler is a <DeviceDisplayUnit> object being
-              connected to the system.</dd>
+              passed to the event handler is a <a>DeviceDisplayUnit</a> object
+              being connected to the system.</dd>
           </dl>
         </section>
         <section>
-          <h2><a>DeviceDisplayUnit</a> interface<h2>
+          <h2><a>DeviceDisplayUnit</a> interface</h2>
           <dl title="interface DeviceDisplayUnit" class='idl'>
             <dt>attribute readonly DOMString id</dt>
             <dd>The unique identifier of the display.</dd>
@@ -357,7 +361,7 @@
       </section>
     </section>
     <section>
-      <h2>Requirements & Use Case</h2>
+      <h2>Requirements &amp; Use Case</h2>
     </section>
   </body>
 </html>
