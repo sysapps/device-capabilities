@@ -205,6 +205,15 @@
             <a>DeviceCapabilityProfile</a> acts as a feature supported matrix
             indicating the capabilities supported by the system.
           </p>
+          <section class='issue'>
+            The current list of capabilities is provisional and is subject to
+            change. The <a>DeviceCapabilityProfile</a> interface should expose
+            capabilities that cannot be reliably feature detected and have use
+            cases. See also the
+            <a href="http://www.w3.org/html/wg/drafts/html/CR/webappapis.html#system-state-and-capabilities">
+            system state and capabilities</a> for capabilities defined in
+            [[HTML5]]. 
+          </section>
           <dl title="interface DeviceCapabilityProfile" class='idl'>
             <dt>readonly attribute boolean bluetooth</dt>
             <dd>Indicate whether the device supports Bluetooth.</dd>
@@ -261,6 +270,10 @@
       </section>
       <section>
         <h2>CPU</h2>
+        <section class='issue'>
+          Events will probably work better for properties that change their values
+          frequently (e.g. <code>load</code> and <code>availableCapacity</code>).
+        </section>
         <section>
           <dl title="interface DeviceCPU" class='idl'>
             <dt>readonly attribute unsigned int numOfProcessors</dt>
