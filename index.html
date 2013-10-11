@@ -265,14 +265,14 @@
               readonly attribute <a>StorageUnit[]</a> storages
             </dt>
             <dd>
-              An array of <a>StorageUnit</a> objects
+              An array of <a>StorageUnit</a> objects.
             </dd>
             <dt>
               attribute <a>EventHandler</a> onattach
             </dt>
             <dd>
               Fired when a new storage is attached to the system. The parameter
-              passed to the event handler is the <a>StorageUnit</a> being
+              passed to the event handler is the <a>StorageUnit</a> object being
               connected to the system.
             </dd>
             <dt>
@@ -280,7 +280,7 @@
             </dt>
             <dd>
               Fired when a new storage is detached to the system. The parameter
-              passed to the event handler is the <a>StorageUnit</a> being
+              passed to the event handler is the <a>StorageUnit</a> object being
               disconnected to the system.
             </dd>
           </dl>
@@ -290,6 +290,9 @@
             <a>StorageUnit</a> interface
           </h2>
           <section>
+            <dl title="enum">
+
+            </dl>
             <dl title="interface StorageUnit" class='idl'>
               <dt>
                 attribute readonly DOMString id
@@ -307,8 +310,21 @@
                 attribute readonly DOMString type
               </dt>
               <dd>
-                The type of storage device, should be one of 'fixed',
-                'removable', 'unknown'.
+                The type of storage device, should be one of <b>'fixed',
+                'removable', 'unknown'.</b>
+                <ol>
+                  <li>
+                    If a storage device is an fixed media, e.g. internal SD
+                    card, SSD or internal harddisk, it is of <b>'fixed'</b> type. 
+                  </li>
+                  <li>
+                    If a storage device is a plugin-and-play device, e.g. USB
+                    flash drive, removable harddisk/SD card, it is of <b>'removable'</b>
+                    type.
+                  </li>
+                  <li>
+                    Otherwise, the storage is of <b>'unknown'</b> type.
+                  </li>
               </dd>
               <dt>
                 attribute readonly unsigned long capacity
@@ -407,13 +423,15 @@
               attribute readonly unsigned long availWidth
             </dt>
             <dd>
-              The adjusted width to exclude the window decor if have, in pixels
+              The adjusted width to exclude the window decoration if have, 
+              e.g. status bar or task bar, if have, in pixels
             </dd>
             <dt>
               attribute readonly unsigned long availHeight
             </dt>
             <dd>
-              The adjusted height to exclude th window decor if have, in pixels
+              The adjusted height to exclude the window decoration if have,
+              in pixels
             </dd>
           </dl>
         </section>
