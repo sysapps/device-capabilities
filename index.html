@@ -208,9 +208,20 @@
         <section class='issue'>
           Events will probably work better for properties that change their
           values frequently (e.g. <code>load</code> and
-          <code>availableCapacity</code>).
+          <code>availCapacity</code>).
         </section>
         <section>
+          <p>
+            An example for monitoring the CPU load at 1 second interval
+            regularly as below:
+            <pre class="example hightlight">
+function watchCPU() {
+  navigator.system.getCPUInfo().then(
+      function(info) { console.log("CPU load: " + info.load); },
+      function(error) { console.log("error occurred: " + error.message); });
+}
+setTimeout(watchCPU, 1);
+            </pre>
           <dl title="interface SystemCPU" class='idl'>
             <dt>
               readonly attribute unsigned int numOfProcessors
@@ -222,7 +233,7 @@
               readonly attribute DOMString archName
             </dt>
             <dd>
-              The CPU architecture name, e.g. "x86", "x86_64", "armv6"
+              The CPU architecture name, e.g. "x86", "x86_64", "armv6", "armv8"
             </dd>
             <dt>
               readonly attribute float load
@@ -239,7 +250,19 @@
           Memory
         </h2>
         <section>
-          <dl title="interface DeviceMemory" class='idl'>
+          <p>
+            An example for monitoring the free memory change at 5 seconds
+            interval regularly as below:
+            <pre class="example hightlight">
+function monitorFreeMemory() {
+  navigator.system.getMemoryInfo().then(
+      function(info) { console.log("available bytes: " + info.availCapacity); },
+      function(error) { console.log("error occurred: " + error.message); });
+}
+setTimeout(monitorFreeMemory, 5);
+            </pre>
+          </p>
+          <dl title="interface SystemMemory" class='idl'>
             <dt>
               readonly attribute unsigned long capacity
             </dt>
@@ -247,7 +270,7 @@
               The total capacity of system memory, in bytes.
             </dd>
             <dt>
-              readonly attribute unsigend long availableCapacity
+              readonly attribute unsigend long availCapacity
             </dt>
             <dd>
               The current available capacity of system memory, in bytes.
