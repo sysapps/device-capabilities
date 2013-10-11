@@ -41,12 +41,6 @@
     </script>
   </head>
   <body>
-    <section class='issue'>
-      It might be better to divide each device capability into a separate API
-      spec, like <a href="http://www.w3.org/TR/battery-status/">Battery Status
-      API</a> does. Putting so many API categories into one spec would make it
-      hard to be reviewed and identify the real usage scenarios.
-    </section>
     <section id='abstract'>
       This specification defines a set of System Level APIs to allow Web
       applications retrieve the status of the device capabilities supported and
@@ -65,13 +59,11 @@
       </p>
       <p>
         Note that this specification doesn't attempt to re-define device APIs
-        which are already officially published by W3C working group. For
+        which are already officially published by W3C working group, for
         example, <a href="http://www.w3.org/TR/battery-status/">Battery Status
         API</a> , <a href="http://www.w3.org/TR/netinfo-api/">Network
         Information API</a> , and <a href=
-        "http://www.w3.org/TR/screen-orientation/">Screen Orientation API</a> .
-        If the published device API specification cannot satisfy the
-        requirements, the right way is to consider how to extend it.
+        "http://www.w3.org/TR/screen-orientation/">Screen Orientation API</a>.
       </p>
     </section>
     <section class="informative">
@@ -167,8 +159,8 @@
             <li>If the operation successfully completes, run these substeps:
               <ol>
                 <li>Let <em>data</em> be a new object for the specified device
-                information (e.g. <a>DeviceCPU</a>, <a>DeviceStorage</a> and
-                <a>DeviceDisplay</a>) that were retrieved,
+                information (e.g. <a>SystemCPU</a>, <a>SystemStorage</a> and
+                <a>SystemDisplay</a>) that were retrieved,
                 </li>
                 <li>Run <em>resolver</em>'s intenal <code>fulfill</code>
                 algorithm with <em>data</em> as <code>value</code>.
@@ -219,24 +211,25 @@
           <code>availableCapacity</code>).
         </section>
         <section>
-          <dl title="interface DeviceCPU" class='idl'>
+          <dl title="interface SystemCPU" class='idl'>
             <dt>
               readonly attribute unsigned int numOfProcessors
             </dt>
             <dd>
-              TODO
+              The number of logical processors.
             </dd>
             <dt>
               readonly attribute DOMString archName
             </dt>
             <dd>
-              TODO
+              The CPU architecture name, e.g. "x86", "x86_64", "armv6"
             </dd>
             <dt>
               readonly attribute float load
             </dt>
             <dd>
-              TODO
+              This attribute indicates the current CPU load, as a number between
+              0.0 and 1.0.
             </dd>
           </dl>
         </section>
@@ -251,13 +244,13 @@
               readonly attribute unsigned long capacity
             </dt>
             <dd>
-              TODO
+              The total capacity of system memory, in bytes.
             </dd>
             <dt>
               readonly attribute unsigend long availableCapacity
             </dt>
             <dd>
-              TODO
+              The current available capacity of system memory, in bytes.
             </dd>
           </dl>
         </section>
@@ -267,19 +260,19 @@
           Storage
         </h2>
         <section>
-          <dl title="interface DeviceStorage" class='idl'>
+          <dl title="interface SystemStorage" class='idl'>
             <dt>
-              readonly attribute <a>DeviceStorageUnit[]</a> storages
+              readonly attribute <a>StorageUnit[]</a> storages
             </dt>
             <dd>
-              An array of <a>DdeviceStorageUnit</a> objects
+              An array of <a>StorageUnit</a> objects
             </dd>
             <dt>
               attribute <a>EventHandler</a> onattach
             </dt>
             <dd>
               Fired when a new storage is attached to the system. The parameter
-              passed to the event handler is the <a>DeviceStorageUnit</a> being
+              passed to the event handler is the <a>StorageUnit</a> being
               connected to the system.
             </dd>
             <dt>
@@ -287,17 +280,17 @@
             </dt>
             <dd>
               Fired when a new storage is detached to the system. The parameter
-              passed to the event handler is the <a>DeviceStorageUnit</a> being
+              passed to the event handler is the <a>StorageUnit</a> being
               disconnected to the system.
             </dd>
           </dl>
         </section>
         <section>
           <h2>
-            <a>DeviceStorageUnit</a> interface
+            <a>StorageUnit</a> interface
           </h2>
           <section>
-            <dl title="interface DeviceStorageUnit" class='idl'>
+            <dl title="interface StorageUnit" class='idl'>
               <dt>
                 attribute readonly DOMString id
               </dt>
@@ -308,20 +301,20 @@
                 attribute readonly DOMString name
               </dt>
               <dd>
-                The human-readable name
+                The human-readable name for this storage unit.
               </dd>
               <dt>
                 attribute readonly DOMString type
               </dt>
               <dd>
                 The type of storage device, should be one of 'fixed',
-                'removable', 'unknown'
+                'removable', 'unknown'.
               </dd>
               <dt>
-                attribute readonly double capacity
+                attribute readonly unsigned long capacity
               </dt>
               <dd>
-                The total capacity of the storage devices, in bytes
+                The total capacity of the storage unit, in bytes
               </dd>
             </dl>
           </section>
@@ -332,12 +325,12 @@
           Display
         </h2>
         <section>
-          <dl title="interface DeviceDisplay : EventTarget" class='idl'>
+          <dl title="interface SystemDisplay : EventTarget" class='idl'>
             <dt>
-              readonly attribute <a>DeviceDisplayUnit[]</a> displays
+              readonly attribute <a>DisplayUnit[]</a> displays
             </dt>
             <dd>
-              An array of <a>DeviceDisplayUnit</a> objects
+              An array of <a>DisplayUnit</a> objects
             </dd>
             <dt>
               attribute <a>EventHandler</a> onconnect
@@ -345,23 +338,23 @@
             <dd>
               Fired when a new display is connected to the system. The
               parameter passed to the event handler is a
-              <a>DeviceDisplayUnit</a> object being connected to the system.
+              <a>DisplayUnit</a> object being connected to the system.
             </dd>
             <dt>
               attribute <a>EventHandler</a> ondisconnect
             </dt>
             <dd>
               Fired when a display is removed from the system. The parameter
-              passed to the event handler is a <a>DeviceDisplayUnit</a> object
+              passed to the event handler is a <a>DisplayUnit</a> object
               being connected to the system.
             </dd>
           </dl>
         </section>
         <section>
           <h2>
-            <a>DeviceDisplayUnit</a> interface
+            <a>DisplayUnit</a> interface
           </h2>
-          <dl title="interface DeviceDisplayUnit" class='idl'>
+          <dl title="interface DisplayUnit" class='idl'>
             <dt>
               attribute readonly DOMString id
             </dt>
