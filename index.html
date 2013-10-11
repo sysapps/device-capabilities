@@ -104,7 +104,7 @@
     </section>
     <section>
       <h2>
-        <a>DeviceCapabilities</a> interface
+        <a>DeviceCapabilities</a> Interface
       </h2>
       <section>
         <p>
@@ -307,15 +307,8 @@ setTimeout(monitorFreeMemory, 5);
               disconnected to the system.
             </dd>
           </dl>
-        </section>
-        <section>
-          <h2>
-            <a>StorageUnit</a> interface
-          </h2>
+          <h2><a>StorageUnit</a> interface</h2>
           <section>
-            <dl title="enum">
-
-            </dl>
             <dl title="interface StorageUnit" class='idl'>
               <dt>
                 attribute readonly DOMString id
@@ -364,98 +357,128 @@ setTimeout(monitorFreeMemory, 5);
           Display
         </h2>
         <section>
-          <dl title="interface SystemDisplay : EventTarget" class='idl'>
-            <dt>
-              readonly attribute <a>DisplayUnit[]</a> displays
-            </dt>
-            <dd>
-              An array of <a>DisplayUnit</a> objects
-            </dd>
-            <dt>
-              attribute <a>EventHandler</a> onconnect
-            </dt>
-            <dd>
-              Fired when a new display is connected to the system. The
-              parameter passed to the event handler is a
-              <a>DisplayUnit</a> object being connected to the system.
-            </dd>
-            <dt>
-              attribute <a>EventHandler</a> ondisconnect
-            </dt>
-            <dd>
-              Fired when a display is removed from the system. The parameter
-              passed to the event handler is a <a>DisplayUnit</a> object
-              being connected to the system.
-            </dd>
+        <dl title="interface SystemDisplay : EventTarget" class='idl'>
+          <dt>
+            readonly attribute <a>DisplayUnit[]</a> displays
+          </dt>
+          <dd>
+            An array of <a>DisplayUnit</a> objects
+          </dd>
+          <dt>
+            attribute <a>EventHandler</a> onconnect
+          </dt>
+          <dd>
+            Fired when a new display is connected to the system. The
+            parameter passed to the event handler is a
+            <a>DisplayUnit</a> object being connected to the system.
+          </dd>
+          <dt>
+            attribute <a>EventHandler</a> ondisconnect
+          </dt>
+          <dd>
+            Fired when a display is removed from the system. The parameter
+            passed to the event handler is a <a>DisplayUnit</a> object
+            being connected to the system.
+          </dd>
+        </dl>
+        </section>
+        <h2>
+          <a>DisplayUnit</a> interface
+        </h2>
+        <section>
+        <dl title="interface DisplayUnit" class='idl'>
+          <dt>
+            attribute readonly DOMString id
+          </dt>
+          <dd>
+            The unique identifier of the display.
+          </dd>
+          <dt>
+            attribute readonly DOMString name
+          </dt>
+          <dd>
+            The user-friendly name (e.g. "HP LCD monitor").
+          </dd>
+          <dt>
+            attribute readonly boolean isPrimary
+          </dt>
+          <dd>
+            True if this is the primary display.
+          </dd>
+          <dt>
+            attribute readonly boolean isInternal
+          </dt>
+          <dd>
+            True if this is an internal display.
+          </dd>
+          <dt>
+            attribute readonly unsigned int dpiX
+          </dt>
+          <dd>
+            The number of pixels per inch along the x-axis
+          </dd>
+          <dt>
+            attribute readonly unsigned int dpiY
+          </dt>
+          <dd>
+            The number of pixels per inch along the y-axis
+          </dd>
+          <dt>
+            attribute readonly unsigned long width
+          </dt>
+          <dd>
+            The total number of addressable pixels along the x-axis.
+          </dd>
+          <dt>
+            attribute readonly unsigned long height
+          </dt>
+          <dd>
+            The total number of addressable pixels along the y-axis.
+          </dd>
+          <dt>
+            attribute readonly unsigned long availWidth
+          </dt>
+          <dd>
+            The adjusted width to exclude the window decoration if have, 
+            e.g. status bar or task bar, if have, in pixels
+          </dd>
+          <dt>
+            attribute readonly unsigned long availHeight
+          </dt>
+          <dd>
+            The adjusted height to exclude the window decoration if have,
+            in pixels
+          </dd>
+        </dl>
+      </section>
+      </section>
+      <section>
+        <h2> Audio and Video Codecs </h2>
+        <p> Exposes information about the audio/video codecs available on the device </p>
+        <section>
+          <dl title="interface SystemAVCodecs" class="idl">
+            <dt>readonly attribute AudioCodec[] audioCodecs</dt>
+            <dd>All available audio codecs supported by the device </dd>
+            <dt>readonly attribute VideoCodec[] videoCodecs</dt>
+            <dd>All available video codecs supported by the device</dd>
+          <dl>
+        </section>
+        <h3><a>AudioCodec</a> Interface </h3>
+        <section>
+          <dl title="interface AudioCodec" class="idl">
+            <dt>readonly attribute DOMString format</dt>
+            <dd>The audio encoding format, e.g. "MP3", "G.711", "MIDI", "MP4"</dd>
           </dl>
         </section>
+        <h3><a>VideoCodec</a> Interface </h3>
         <section>
-          <h2>
-            <a>DisplayUnit</a> interface
-          </h2>
-          <dl title="interface DisplayUnit" class='idl'>
-            <dt>
-              attribute readonly DOMString id
-            </dt>
-            <dd>
-              The unique identifier of the display.
-            </dd>
-            <dt>
-              attribute readonly DOMString name
-            </dt>
-            <dd>
-              The user-friendly name (e.g. "HP LCD monitor").
-            </dd>
-            <dt>
-              attribute readonly boolean isPrimary
-            </dt>
-            <dd>
-              True if this is the primary display.
-            </dd>
-            <dt>
-              attribute readonly boolean isInternal
-            </dt>
-            <dd>
-              True if this is an internal display.
-            </dd>
-            <dt>
-              attribute readonly unsigned int dpiX
-            </dt>
-            <dd>
-              The number of pixels per inch along the x-axis
-            </dd>
-            <dt>
-              attribute readonly unsigned int dpiY
-            </dt>
-            <dd>
-              The number of pixels per inch along the y-axis
-            </dd>
-            <dt>
-              attribute readonly unsigned long width
-            </dt>
-            <dd>
-              The total number of addressable pixels along the x-axis.
-            </dd>
-            <dt>
-              attribute readonly unsigned long height
-            </dt>
-            <dd>
-              The total number of addressable pixels along the y-axis.
-            </dd>
-            <dt>
-              attribute readonly unsigned long availWidth
-            </dt>
-            <dd>
-              The adjusted width to exclude the window decoration if have, 
-              e.g. status bar or task bar, if have, in pixels
-            </dd>
-            <dt>
-              attribute readonly unsigned long availHeight
-            </dt>
-            <dd>
-              The adjusted height to exclude the window decoration if have,
-              in pixels
-            </dd>
+          <dl title="interface VideoCodec" class="idl">
+            <dt>readonly attribute DOMString format</dt>
+            <dd>The video encoding format, e.g. "H.264", "MPEG4" </dd>
+            <dt>readonly attribute boolean hwAccel</dt>
+            <dd>True if the video decoding is hardward accelerated, false otherwise</dd>
+            <dt>readonly attribute boolean encode</dt>
+            <dd>True if the device can encode the video in this format, false otherwise</dd>
           </dl>
         </section>
       </section>
@@ -464,6 +487,31 @@ setTimeout(monitorFreeMemory, 5);
       <h2>
         Requirements &amp; Use Case
       </h2>
+      <b>User Watches Video Content on Device</b>
+      <p>
+       The user has opened a video playback application and the application
+       attempts to provide the optimal viewing experience for the device. The
+       content provider has a multithreaded decoder so the application use the
+       Cpu API to see if the CPU would be able to take advantage of concurrent
+       threads. It then checks to see if the CPU is currently busy by looking
+       at current usage and comparing current frequency to maximum frequency. 
+       If the application determines that playback can proceed without hardware
+       acceleration on the system in its current state, playback proceeds.
+       Otherwise, the application either looks for hardware acceleration
+       capabilities, recommends that the user shut down other applications that
+       are using device CPU resources, or streams lesser content that can be
+       decoded with fewer CPU resources.
+      </p>
+      <b>Encoding video on the device : local vs cloud</b>
+      <p>
+        The user wants to share a large family video to others via cloud service
+        provider. Before uploading video, an application may need to intelligently
+        split up the work of encoding video between the local device, based on its
+        capabilities, and a web service in the cloud that encodes video. The
+        video codecs information could help application decide to encode the
+        large video to a small one if the device has the video encoding capability
+        as desired.
+      </p>
     </section>
   </body>
 </html>
