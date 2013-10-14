@@ -493,20 +493,26 @@ setTimeout(monitorFreeMemory, 5);
       <h2>
         Requirements &amp; Use Case
       </h2>
-      <b>User Watches Video Content on Device</b>
-      <p>
-       The user has opened a video playback application and the application
-       attempts to provide the optimal viewing experience for the device. The
-       content provider has a multithreaded decoder so the application use the
-       Cpu API to see if the CPU would be able to take advantage of concurrent
-       threads. It then checks to see if the CPU is currently busy by looking
-       at current usage and comparing current frequency to maximum frequency. 
-       If the application determines that playback can proceed without hardware
-       acceleration on the system in its current state, playback proceeds.
-       Otherwise, the application either looks for hardware acceleration
-       capabilities, recommends that the user shut down other applications that
-       are using device CPU resources, or streams lesser content that can be
-       decoded with fewer CPU resources.
+      <b>Stream Video Content to Device</b>
+      <p>51% of the online video content in US is user generated.It typically
+         is uploaded to a web site like YouTube or Facebook in some user
+         generated format. This content can be accessed from different client
+         devices which may have media players that supports different set of
+         codecs. This implies some level of transcoding that needs to be done
+         for the user to be able to vide the media stream. Depending on the
+         client device capabilities and network capacity, the cloud app can
+         decide what format to transmit to the client:
+         <ol>
+          <li>It can stream the encoded stream if the client device has
+              computation or hardware acceleration for decoding.</li>
+          <li>It can stream an encoded stream in a format not supported by the
+              media player on the client, but the client has the computation or
+              hardware acceleration capability for transcoding.</li>
+          <li>It can decide to transcode on the server if the client lacks
+              either of above capabilities.</li>
+          <li>It can decide to decode the video stream and deliver a bit stream
+              for a very low-end device.</li>
+         </ol>
       </p>
       <b>Encoding video on the device : local vs cloud</b>
       <p>
