@@ -460,6 +460,12 @@ setTimeout(monitorFreeMemory, 5);
       </section>
       <section>
         <h2> Audio and Video Codecs </h2>
+        <section class="issue">
+        Exposing codecs information on client device will improve browser's
+        fingerprinting. A better approach might extend to video element to
+        add a candidate source and let User Agent to choose the most
+        appropriate media content to play back.
+        </section>
         <p> Exposes information about the audio/video codecs available on the device </p>
         <section>
           <dl title="interface SystemAVCodecs" class="idl">
