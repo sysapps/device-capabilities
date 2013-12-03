@@ -47,22 +47,21 @@
     </section>
     <section id='sotd'>
       <p>
-        This document is intended to define the Device Capabilities API to
-        retrieve the status of hardware device, get the value of selected
-        properties, and subscribe to asynchronous notifications of some
-        specific properties in Web applications. To avoid pushing an
-        over-complicated and overlapped API definitions, it firstly focuses on
-        some general device capabilities, like CPU, memory, storage and display
-        and so on. This specification is easy to be extended for supporting a
-        new device capability during API evolution.
+        This document defines APIs to retrieve the status of generic hardware
+        features from the system. Future versions of the specification can
+        extend the set of hardware features supported.
       </p>
       <p>
-        Note that this specification doesn't attempt to re-define device APIs
-        which are already officially published by W3C working group, for
-        example, <a href="http://www.w3.org/TR/battery-status/">Battery Status
-        API</a> , <a href="http://www.w3.org/TR/netinfo-api/">Network
-        Information API</a> , and <a href=
-        "http://www.w3.org/TR/screen-orientation/">Screen Orientation API</a>.
+        The specification is scoped to address generic hardware features
+        that apply to a wide range of different device types. Hardware
+        capabilities that apply only to a specific class of devices
+        are out of scope. For device class specific features, there exists
+        separate specifications such as the
+        <a href="http://www.w3.org/TR/battery-status/">Battery Status API</a>,
+        the <a href="http://www.w3.org/TR/netinfo-api/">Network
+        Information API</a>, and the
+        <a href="http://www.w3.org/TR/screen-orientation/">
+        Screen Orientation API</a>, for example.
       </p>
     </section>
     <section class="informative">
