@@ -10,7 +10,8 @@
 </script>
     <script class='remove'>
       var respecConfig = {
-              specStatus:          "ED"
+              noLegacyStyle: false
+          ,   specStatus:          "ED"
           ,   shortName:           "device-capabilities-api"
           ,   publishDate:         ""
           ,   previousPublishDate: ""
@@ -79,7 +80,17 @@
         compute intensive task.
       </p>
     </section>
-    <section id="conformance"></section>
+    <section id="conformance">
+      <p>
+        This specification defines conformance criteria that apply to a single
+        product: the <dfn>user agent</dfn> that implements the
+        interfaces that it contains.
+      </p>
+      <p>
+        The concept <dfn><a href="http://dev.w3.org/html5/spec/webappapis.html#queue-a-task">
+        queue a task</a></dfn> is defined in [[!HTML5]].
+      </p>
+    </section>
     <section>
       <h2>
         Security and Privacy Considerations
@@ -99,62 +110,61 @@
       </h2>
       <section>
         <p>
-          The <a>DeviceCapabilities</a> interface is exposed on the
-          <a>Navigator</a> object.
+          The <code>system</code> attribute of the <a>Navigator</a> interface
+          MUST return an instance of the <a>DeviceCapabilities</a> interface.
         </p>
         <dl title="partial interface Navigator" class="idl">
           <dt>
             readonly attribute DeviceCapabilities system
           </dt>
           <dd>
-            The object that exposes the device capabilities retrieval
-            functionality.
           </dd>
         </dl>
         <section>
           <p>
-            <a>DeviceCapabilities</a> interface encapsulates a set of methods
-            to retrieve the hardware capabilities and specific device data,
-            e.g. CPU, storage and display, and event handler to register
-            asynchronous notification when the interested system events are
-            triggered.
-          </p>
-          <p>
-            The methods defined in <a>DeviceCapabilities</a> are designed to
-            return a <dfn id="promise"><code><a href=
-            "http://dom.spec.whatwg.org/#promise">Promise</a></code></dfn>
-            object and follow a specific pattern when invoked:
+            When one of the <a>capability method</a>s (described in the table
+            below) is invoked on a <a>DeviceCapabilities</a> object, the
+            <a>user agent</a> MUST run the following steps:
           </p>
           <ol>
-            <li>Make a request to the system to retrieve the specified
-            information implied by the method name;
+            <li>
+              Let <em>promise</em> be a new <code>Promise</code> [[!DOM]]
+              object and <em>resolver</em> its associated resolver.
             </li>
-            <li>Let <em><a href="#promise">promise</a></em> be a new
-            <code><a href="#promise">Promise</a></code> object and
-            <em>resolver</em> its associated resolver.
+            <li>
+              Return <em>promise</em> and run the remaining steps
+              asynchronously.
             </li>
-            <li>Return <em><a href="#promise">promise</a></em> and run the
-            remaining steps asynchronously.
+            <li>
+              Retrieve an instance of the <a>capability data interface</a>
+              corresponding to the invoked <a>capability method</a>.
             </li>
-            <li>If an error occurs, run these substeps and then terminate these
-            steps:
+            <li>
+              If an error occurs, run these substeps and then terminate these
+              steps:
               <ol>
-                <li>Let <em>error</em> be a new <code>DOMError</code> object
-                whose name is <code>"UnknownError"</code>,
+                <li>
+                  Let <em>error</em> be a new <code>DOMError</code> object
+                  whose name is <code>"UnknownError"</code>,
                 </li>
-                <li>Run <em>resolver</em>'s internal <em>reject</em> algorithm
-                with <em>error</em> as <code>value</code>.
+                <li>
+                  Run <em>resolver</em>'s internal <em>reject</em> algorithm
+                  with <em>error</em> as <code>value</code>.
                 </li>
               </ol>
             </li>
-            <li>If the operation successfully completes, run these substeps:
+            <li>
+              If the capability data retrieval operation successfully
+              completes, run these substeps:
               <ol>
-                <li>Let <em>data</em> be a new object for the specified device
-                information (e.g. <a>SystemCPU</a>, <a>SystemStorage</a> and
-                <a>SystemDisplay</a>) that were retrieved,
+                <li>
+                  Let <em>data</em> be the instance of the
+                  <a>capability data interface</a> from the retrieval
+                  operation.
                 </li>
-                <li>Run <em>resolver</em>'s intenal <code>fulfill</code>
-                algorithm with <em>data</em> as <code>value</code>.
+                <li>
+                  Run <em>resolver</em>'s internal <code>fulfill</code>
+                  algorithm with <em>data</em> as <code>value</code>.
                 </li>
               </ol>
             </li>
@@ -164,66 +174,185 @@
               Promise getCPUInfo()
             </dt>
             <dd>
-              Retrieve the specific information for CPU
             </dd>
             <dt>
               Promise getMemoryInfo()
             </dt>
             <dd>
-              Retrieve the memory information
             </dd>
             <dt>
               Promise getStorageInfo()
             </dt>
             <dd>
-              Retrieve the storage information
             </dd>
             <dt>
               Promise getDisplayInfo()
             </dt>
             <dd>
-              Retrieve the display information
             </dd>
             <dt>
               Promise getAVCodecs()
             </dt>
             <dd>
-              Retrieve the audio and video codec information
             </dd>
             <dt>
               attribute <a>EventHandler</a> onstorageattach
             </dt>
             <dd>
-              Fired when a new storage is attached to the system. The parameter
-              passed to the event handler is the <a>StorageUnit</a> object being
-              attached to the system.
             </dd>
             <dt>
               attribute <a>EventHandler</a> onstoragedetach
             </dt>
             <dd>
-              Fired when a new storage is detached to the system. The parameter
-              passed to the event handler is the <a>StorageUnit</a> object being
-              detached to the system.
             </dd>
             <dt>
               attribute <a>EventHandler</a> ondisplayconnect
             </dt>
             <dd>
-              Fired when a new display is connected to the system. The
-              parameter passed to the event handler is a <a>DisplayUnit</a>
-              object being connected to the system.
             </dd>
             <dt>
               attribute <a>EventHandler</a> ondisplaydisconnect
             </dt>
             <dd>
-              Fired when a display is removed from the system. The parameter
-              passed to the event handler is a <a>DisplayUnit</a> object
-              being disconnected to the system.
+            </dd>
+          </dl>
+          <p>
+            The following are the <a>capability method</a>s and their
+            corresponding <a>capability data interface</a>s:
+          </p>
+          <table class="simple">
+            <thead>
+              <tr>
+                <th><dfn>description</dfn></th>
+                <th><dfn>capability method</dfn></th>
+                <th><dfn>capability data interface</dfn></th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>Retrieve the specific information for CPU</td>
+                <td><strong><code>getCPUInfo()</code></strong></td>
+                <td><code><a>SystemCPU</a></code></td>
+              </tr>
+              <tr>
+                <td>Retrieve the memory information</td>
+                <td><strong><code>getMemoryInfo()</code></strong></td>
+                <td><code><a>SystemMemory</a></code></td>
+              </tr>
+              <tr>
+                <td>Retrieve the storage information</td>
+                <td><strong><code>getStorageInfo()</code></strong></td>
+                <td><code><a>SystemStorage</a></code></td>
+              </tr>
+              <tr>
+                <td>Retrieve the display information</td>
+                <td><strong><code>getDisplayInfo()</code></strong></td>
+                <td><code><a>SystemDisplay</a></code></td>
+              </tr>
+              <tr>
+                <td>Retrieve the audio and video codec information</td>
+                <td><strong><code>getAVCodecs()</code></strong></td>
+                <td><code><a>SystemAVCodecs</a></code></td>
+              </tr>
+            </tbody>
+          </table>
+          <h2>
+            <a>SystemStorageEvent</a> Interface
+          </h2>
+          <dl title='[Constructor(DOMString type, optional SystemStorageEventInit eventInitDict)] interface SystemStorageEvent : Event' class='idl' data-merge="SystemStorageEventInit">
+            <dt>
+              readonly attribute storage StorageUnit
+            </dt>
+            <dd>
+            </dd>
+          </dl>
+          <dl title="dictionary SystemStorageEventInit : EventInit" class='idl'>
+            <dt>
+              readonly attribute storage StorageUnit
+            </dt>
+            <dd>
+            </dd>
+          </dl>
+          <h2>
+            <a>SystemDisplayEvent</a> Interface
+          </h2>
+          <dl title='[Constructor(DOMString type, optional SystemDisplayEventInit eventInitDict)] interface SystemDisplayEvent Interface
+
+          DisplayEvent : Event' class='idl' data-merge="SystemDisplayEventInit">
+            <dt>
+              readonly attribute display DisplayUnit
+            </dt>
+            <dd>
+            </dd>
+          </dl>
+          <dl title="dictionary SystemDisplayEventInit : EventInit" class='idl'>
+            <dt>
+              readonly attribute display DisplayUnit
+            </dt>
+            <dd>
             </dd>
           </dl>
         </section>
+        <p>
+          When <dfn>a new storage is attached to the system</dfn>, the
+          <a>user agent</a> MUST <a>queue a task</a> to
+          <a href="http://dom.spec.whatwg.org/#concept-event-fire">fire an
+          event</a> named <code>storageattach</code> at the
+          <a>DeviceCapabilities</a> object using the <a>SystemStorageEvent</a>
+          interface that also meets these conditions:
+        </p>
+        <ul>
+          <li>
+            Initialize the <code>storage</code> attribute to an instance
+            of the <a>StorageUnit</a> interface, which represents the
+            newly attached storage.
+          </li>
+        </ul>
+        <p>
+          When <dfn>a new storage is detached from the system</dfn>, the
+          <a>user agent</a> MUST <a>queue a task</a> to
+          <a href="http://dom.spec.whatwg.org/#concept-event-fire">fire an
+          event</a> named <code>storagedetach</code> at the
+          <a>DeviceCapabilities</a> object using the <a>SystemStorageEvent</a>
+          interface that also meets these conditions:
+        </p>
+        <ul>
+          <li>
+            Initialize the <code>storage</code> attribute to an instance
+            of the <a>StorageUnit</a> interface, which represents the
+            newly detached storage.
+          </li>
+        </ul>
+        <p>
+          When <dfn>a new display is connected to the system</dfn>, the
+          <a>user agent</a> MUST <a>queue a task</a> to
+          <a href="http://dom.spec.whatwg.org/#concept-event-fire">fire an
+          event</a> named <code>displayconnect</code> at the
+          <a>DeviceCapabilities</a> object using the <a>SystemDisplayEvent</a>
+          interface that also meets these conditions:
+        </p>
+        <ul>
+          <li>
+            Initialize the <code>display</code> attribute to an instance
+            of the <a>DisplayUnit</a> interface, which represents the
+            newly connected display.
+          </li>
+        </ul>
+        <p>
+          When <dfn>a display is disconnected from the system</dfn>, the
+          <a>user agent</a> MUST <a>queue a task</a> to
+          <a href="http://dom.spec.whatwg.org/#concept-event-fire">fire an
+          event</a> named <code>displaydisconnect</code> at the
+          <a>DeviceCapabilities</a> object using the <a>SystemDisplayEvent</a>
+          interface that also meets these conditions:
+        </p>
+        <ul>
+          <li>
+            Initialize the <code>display</code> attribute to an instance
+            of the <a>DisplayUnit</a> interface, which represents the
+            newly disconnected display.
+          </li>
+        </ul>
       </section>
     </section>
     <section>
