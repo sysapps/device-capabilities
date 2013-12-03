@@ -168,7 +168,7 @@
               </ol>
             </li>
           </ol>
-          <dl title="interface DeviceCapabilities" class='idl'>
+          <dl title="interface DeviceCapabilities : EventTarget" class='idl'>
             <dt>
               Promise getCPUInfo()
             </dt>
@@ -198,6 +198,38 @@
             </dt>
             <dd>
               Retrieve the audio and video codec information
+            </dd>
+            <dt>
+              attribute <a>EventHandler</a> onstorageattach
+            </dt>
+            <dd>
+              Fired when a new storage is attached to the system. The parameter
+              passed to the event handler is the <a>StorageUnit</a> object being
+              attached to the system.
+            </dd>
+            <dt>
+              attribute <a>EventHandler</a> onstoragedetach
+            </dt>
+            <dd>
+              Fired when a new storage is detached to the system. The parameter
+              passed to the event handler is the <a>StorageUnit</a> object being
+              detached to the system.
+            </dd>
+            <dt>
+              attribute <a>EventHandler</a> ondisplayconnect
+            </dt>
+            <dd>
+              Fired when a new display is connected to the system. The
+              parameter passed to the event handler is a <a>DisplayUnit</a>
+              object being connected to the system.
+            </dd>
+            <dt>
+              attribute <a>EventHandler</a> ondisplaydisconnect
+            </dt>
+            <dd>
+              Fired when a display is removed from the system. The parameter
+              passed to the event handler is a <a>DisplayUnit</a> object
+              being disconnected to the system.
             </dd>
           </dl>
         </section>
@@ -296,22 +328,6 @@ setTimeout(monitorFreeMemory, 5);
             <dd>
               An array of <a>StorageUnit</a> objects.
             </dd>
-            <dt>
-              attribute <a>EventHandler</a> onattach
-            </dt>
-            <dd>
-              Fired when a new storage is attached to the system. The parameter
-              passed to the event handler is the <a>StorageUnit</a> object being
-              connected to the system.
-            </dd>
-            <dt>
-              attribute <a>EventHandler</a> ondetach
-            </dt>
-            <dd>
-              Fired when a new storage is detached to the system. The parameter
-              passed to the event handler is the <a>StorageUnit</a> object being
-              disconnected to the system.
-            </dd>
           </dl>
           <h2><a>StorageUnit</a> interface</h2>
           <section>
@@ -369,22 +385,6 @@ setTimeout(monitorFreeMemory, 5);
           </dt>
           <dd>
             An array of <a>DisplayUnit</a> objects
-          </dd>
-          <dt>
-            attribute <a>EventHandler</a> onconnect
-          </dt>
-          <dd>
-            Fired when a new display is connected to the system. The
-            parameter passed to the event handler is a
-            <a>DisplayUnit</a> object being connected to the system.
-          </dd>
-          <dt>
-            attribute <a>EventHandler</a> ondisconnect
-          </dt>
-          <dd>
-            Fired when a display is removed from the system. The parameter
-            passed to the event handler is a <a>DisplayUnit</a> object
-            being connected to the system.
           </dd>
         </dl>
         </section>
