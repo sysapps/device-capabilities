@@ -85,14 +85,12 @@
         Security and Privacy Considerations
       </h2>
       <p>
-        A Web application using this API is granted to access some device
-        specific data which may contain information that is treated as private
-        by end-user. For instance a user may become sensitive to a Web
-        application retrieve the available storage free space. Therefore, a
-        conforming implementation of this specification MUST provide a
-        mechanism that protects the user's privacy and this mechanism should
-        ensure that no information exposed by this API is retrievable without
-        the permission granted.
+        The API defined in this specification is used to retrieve information
+        from the underlying system. The information disclosed has impact on
+        privacy and fingerprinting, and therefore a conforming implementation
+        of this specification MUST provide a mechanism that protects the user's
+        privacy. The mechanism MUST ensure that no information is retrievable
+        without the user's express permission.
       </p>
     </section>
     <section>
