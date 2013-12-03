@@ -252,7 +252,7 @@
           <p>
             An example for monitoring the CPU load at 1 second interval
             regularly as below:
-            <pre class="example hightlight">
+            <pre class="example highlight">
 function watchCPU() {
   navigator.system.getCPUInfo().then(
       function(info) { console.log("CPU load: " + info.load); },
@@ -291,15 +291,15 @@ setTimeout(watchCPU, 1);
           <p>
             An example for monitoring the free memory change at 5 seconds
             interval regularly as below:
-            <pre class="example hightlight">
+          </p>
+          <pre class="example highlight">
 function monitorFreeMemory() {
   navigator.system.getMemoryInfo().then(
       function(info) { console.log("available bytes: " + info.availCapacity); },
       function(error) { console.log("error occurred: " + error.message); });
 }
 setTimeout(monitorFreeMemory, 5);
-            </pre>
-          </p>
+          </pre>
           <dl title="interface SystemMemory" class='idl'>
             <dt>
               readonly attribute unsigned long capacity
@@ -363,6 +363,7 @@ setTimeout(monitorFreeMemory, 5);
                   <li>
                     Otherwise, the storage is of <b>'unknown'</b> type.
                   </li>
+                </ol>
               </dd>
               <dt>
                 attribute readonly unsigned long capacity
@@ -473,7 +474,7 @@ setTimeout(monitorFreeMemory, 5);
             <dd>All available audio codecs supported by the device </dd>
             <dt>readonly attribute VideoCodec[] videoCodecs</dt>
             <dd>All available video codecs supported by the device</dd>
-          <dl>
+          </dl>
         </section>
         <h3><a>AudioCodec</a> Interface </h3>
         <section>
@@ -508,6 +509,7 @@ setTimeout(monitorFreeMemory, 5);
          for the user to be able to vide the media stream. Depending on the
          client device capabilities and network capacity, the cloud app can
          decide what format to transmit to the client:
+      </p>
          <ol>
           <li>It can stream the encoded stream if the client device has
               computation or hardware acceleration for decoding.</li>
@@ -519,7 +521,6 @@ setTimeout(monitorFreeMemory, 5);
           <li>It can decide to decode the video stream and deliver a bit stream
               for a very low-end device.</li>
          </ol>
-      </p>
       <b>Encoding video on the device : local vs cloud</b>
       <p>
         The user wants to share a large family video to others via cloud service
