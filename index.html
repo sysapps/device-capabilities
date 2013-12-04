@@ -10,7 +10,7 @@
 </script>
     <script class='remove'>
       var respecConfig = {
-              noLegacyStyle: false
+              noLegacyStyle:       true
           ,   specStatus:          "ED"
           ,   shortName:           "device-capabilities-api"
           ,   publishDate:         ""
@@ -357,17 +357,12 @@
     </section>
     <section>
       <h2>
-        Device Capabilities Properties
+        Capability Data Interfaces
       </h2>
       <section>
         <h2>
-          CPU
+          <a>SystemCPU</a> Interface
         </h2>
-        <section class='issue'>
-          Events will probably work better for properties that change their
-          values frequently (e.g. <code>load</code> and
-          <code>availCapacity</code>).
-        </section>
         <section>
           <p>
             An example for monitoring the CPU load at 1 second interval
@@ -385,27 +380,38 @@ setTimeout(watchCPU, 1);
               readonly attribute unsigned int numOfProcessors
             </dt>
             <dd>
-              The number of logical processors.
             </dd>
             <dt>
               readonly attribute DOMString archName
             </dt>
             <dd>
-              The CPU architecture name, e.g. "x86", "x86_64", "armv6", "armv8"
             </dd>
             <dt>
               readonly attribute float load
             </dt>
             <dd>
-              This attribute indicates the current CPU load, as a number between
-              0.0 and 1.0.
             </dd>
           </dl>
+          <p>
+            The <code>numOfProcessors</code> attribute MUST return a
+            number representing the number of logical processors of the system.
+          </p>
+          <p>
+            The <code>archName</code> attribute MUST return a string
+            representing the CPU architecture of the system, e.g.
+            <code>"x86"</code>, <code>"x86_64"</code>, <code>"armv6"</code>,
+            <code>"armv8"</code>.
+          </p>
+          <p>
+            The <code>load</code> attribute MUST return a number
+            representing the current CPU load of logical processors,
+            as a number in the range 0.0 (minimum) to 1.0 (maximum).
+          </p>
         </section>
       </section>
       <section>
         <h2>
-          Memory
+          <a>SystemMemory</a> Interface
         </h2>
         <section>
           <p>
@@ -425,20 +431,28 @@ setTimeout(monitorFreeMemory, 5);
               readonly attribute unsigned long capacity
             </dt>
             <dd>
-              The total capacity of system memory, in bytes.
             </dd>
             <dt>
               readonly attribute unsigend long availCapacity
             </dt>
             <dd>
-              The current available capacity of system memory, in bytes.
             </dd>
           </dl>
+          <p>
+            The <code>capacity</code> attribute MUST return a
+            number representing the total capacity of system memory,
+            in bytes.
+          </p>
+          <p>
+            The <code>availCapacity</code> attribute MUST
+            return a number representing the available capacity of system
+            memory, in bytes.
+          </p>
         </section>
       </section>
       <section>
         <h2>
-          Storage
+          <a>SystemStorage</a> Interface
         </h2>
         <section>
           <dl title="interface SystemStorage" class='idl'>
@@ -446,58 +460,78 @@ setTimeout(monitorFreeMemory, 5);
               readonly attribute <a>StorageUnit[]</a> storages
             </dt>
             <dd>
-              An array of <a>StorageUnit</a> objects.
             </dd>
           </dl>
+          <p>
+            The <code>storages</code> attribute MUST return
+            an array of <a>StorageUnit</a> objects representing storage
+            devices attached to the system.
+          </p>
           <h2><a>StorageUnit</a> interface</h2>
           <section>
-            <dl title="interface StorageUnit" class='idl'>
+            
+            <dl title="interface StorageUnit" class='idl' data-merge="StorageUnitType">
               <dt>
                 attribute readonly DOMString id
               </dt>
               <dd>
-                The unique identifier of the storage device
               </dd>
               <dt>
-                attribute readonly DOMString name
+                readonly attribute DOMString name
               </dt>
               <dd>
-                The human-readable name for this storage unit.
               </dd>
               <dt>
-                attribute readonly DOMString type
+                readonly attribute StorageUnitType type
               </dt>
               <dd>
-                The type of storage device, should be one of <b>'fixed',
-                'removable', 'unknown'.</b>
-                <ol>
-                  <li>
-                    If a storage device is an fixed media, e.g. internal SD
-                    card, SSD or internal harddisk, it is of <b>'fixed'</b> type. 
-                  </li>
-                  <li>
-                    If a storage device is a plugin-and-play device, e.g. USB
-                    flash drive, removable harddisk/SD card, it is of <b>'removable'</b>
-                    type.
-                  </li>
-                  <li>
-                    Otherwise, the storage is of <b>'unknown'</b> type.
-                  </li>
-                </ol>
               </dd>
               <dt>
                 attribute readonly unsigned long capacity
               </dt>
               <dd>
-                The total capacity of the storage unit, in bytes
               </dd>
             </dl>
+            <dl id="enum-basic" class="idl" title="enum StorageUnitType">
+              <dt>
+                <code>fixed</code>
+              </dt>
+              <dd></dd>
+              <dt>
+                <code>removable</code>
+              </dt>
+              <dd></dd>
+              <dt>
+                <code>unknown</code>
+              </dt>
+              <dd></dd>
+            </dl>
+            <p>
+              The <code>id</code> attribute MUST return the
+              unique identifier of the storage unit.
+            </p>
+            <p>
+              The <code>name</code> attribute MUST return a
+              human-readable string intended to identify the storage unit
+              for the user.
+            </p>
+            <p>
+              The <code>type</code> attribute MUST return 
+              <code>"fixed"</code> if the storage unit is a fixed
+              non-removable storage, <code>"removable"</code> if the storage
+              device is a user removable, otherwise <code>"unknown"</code>.
+            </p>
+            <p>
+              The <code>capacity</code> attribute MUST return a
+              number representing the total capacity of storage unit, in bytes.
+
+              
           </section>
         </section>
       </section>
       <section>
         <h2>
-          Display
+          <a>SystemDisplay</a> Interface
         </h2>
         <section>
         <dl title="interface SystemDisplay" class='idl'>
@@ -505,120 +539,153 @@ setTimeout(monitorFreeMemory, 5);
             readonly attribute <a>DisplayUnit[]</a> displays
           </dt>
           <dd>
-            An array of <a>DisplayUnit</a> objects
           </dd>
         </dl>
+        <p>
+          The <code>displays</code> attribute MUST return
+          an array of <a>DisplayUnit</a> objects representing display
+          devices attached to the system.
+        </p>
         </section>
         <h2>
           <a>DisplayUnit</a> interface
         </h2>
+        The <code>DisplayUnit</code> interface inherits <code>availWidth</code>,
+        <code>availHeight</code>, <code>width</code>, <code>height</code>,
+        <code>colorDepth</code>, and <code>pixelDepth</code> from the
+        <code>Screen</code> interface [[!CSSOM]].
         <section>
-        <dl title="interface DisplayUnit" class='idl'>
+        <dl title="interface DisplayUnit : Screen" class='idl'>
           <dt>
-            attribute readonly DOMString id
+            readonly attribute DOMString id
           </dt>
           <dd>
-            The unique identifier of the display.
           </dd>
           <dt>
-            attribute readonly DOMString name
+            readonly attribute DOMString name
           </dt>
           <dd>
-            The user-friendly name (e.g. "HP LCD monitor").
           </dd>
           <dt>
-            attribute readonly boolean isPrimary
+            readonly attribute boolean isPrimary
           </dt>
           <dd>
-            True if this is the primary display.
           </dd>
           <dt>
-            attribute readonly boolean isInternal
+            readonly attribute boolean isInternal
           </dt>
           <dd>
-            True if this is an internal display.
           </dd>
           <dt>
             attribute readonly unsigned int dpiX
           </dt>
           <dd>
-            The number of pixels per inch along the x-axis
           </dd>
           <dt>
-            attribute readonly unsigned int dpiY
+            readonly attribute unsigned int dpiY
           </dt>
           <dd>
-            The number of pixels per inch along the y-axis
-          </dd>
-          <dt>
-            attribute readonly unsigned long width
-          </dt>
-          <dd>
-            The total number of addressable pixels along the x-axis.
-          </dd>
-          <dt>
-            attribute readonly unsigned long height
-          </dt>
-          <dd>
-            The total number of addressable pixels along the y-axis.
-          </dd>
-          <dt>
-            attribute readonly unsigned long availWidth
-          </dt>
-          <dd>
-            The adjusted width to exclude the window decoration if have, 
-            e.g. status bar or task bar, if have, in pixels
-          </dd>
-          <dt>
-            attribute readonly unsigned long availHeight
-          </dt>
-          <dd>
-            The adjusted height to exclude the window decoration if have,
-            in pixels
           </dd>
         </dl>
+        <p>
+          The <code>id</code> attribute MUST return the
+          unique identifier of the display.
+        </p>
+        <p>
+          The <code>name</code> attribute MUST return a
+          human-readable string intended to identify the display
+          for the user.
+        </p>
+        <p>
+          The <code>isPrimary</code> attribute MUST return
+          true, if the display is the primary display of the system.
+        </p>
+        <p>
+          The <code>isInternal</code> attribute MUST return
+          true, if the display is internal i.e. integral part of the
+          system.
+        </p>
+        <p>
+          The <code>dpiX</code> attribute MUST return
+          the number of pixels per inch along the x-axis.
+        </p>
+        <p>
+          The <code>dpiY</code> attribute MUST return
+          the number of pixels per inch along the y-axis.
+        </p>
       </section>
       </section>
       <section>
-        <h2> Audio and Video Codecs </h2>
+        <h2>
+          <a>SystemAVCodecs</a> Interface
+        </h2>
         <section class="issue">
-        Exposing codecs information on client device will improve browser's
-        fingerprinting. A better approach might extend to video element to
-        add a candidate source and let User Agent to choose the most
-        appropriate media content to play back.
+          Exposing codec information to web applications provides a
+          fingerprinting vector. An alternative approach is to
+          let the User Agent choose the most appropriate media
+          content using the <code>HTMLSourceElement</code>'s
+          <code>type</code> hints.
         </section>
         <p> Exposes information about the audio/video codecs available on the device </p>
         <section>
           <dl title="interface SystemAVCodecs" class="idl">
             <dt>readonly attribute AudioCodec[] audioCodecs</dt>
-            <dd>All available audio codecs supported by the device </dd>
+            <dd></dd>
             <dt>readonly attribute VideoCodec[] videoCodecs</dt>
-            <dd>All available video codecs supported by the device</dd>
+            <dd></dd>
           </dl>
+          <p>
+            The <code>audioCodecs</code> attribute MUST return an array of
+            <a>AudioCodec</a> objects representing the audio codecs supported
+            by the device.
+          </p>
+          <p>
+            The <code>videoCodecs</code> attribute MUST return an array of
+            <a>VideoCodec</a> objects representing the video codecs supported
+            by the device.
+          </p>
         </section>
         <h3><a>AudioCodec</a> Interface </h3>
         <section>
           <dl title="interface AudioCodec" class="idl">
             <dt>readonly attribute DOMString format</dt>
-            <dd>The audio encoding format, e.g. "MP3", "G.711", "MIDI", "MP4"</dd>
+            <dd></dd>
           </dl>
+          <p>
+            The <code>format</code> attribute MUST return a string representing
+            the audio encoding format, e.g. <code>"MP3"</code>,
+            <code>"G.711"</code>, <code>"MIDI"</code>, <code>"MP4"</code>.
+          </p>
         </section>
         <h3><a>VideoCodec</a> Interface </h3>
         <section>
           <dl title="interface VideoCodec" class="idl">
             <dt>readonly attribute DOMString format</dt>
-            <dd>The video encoding format, e.g. "H.264", "MPEG4" </dd>
+            <dd></dd>
             <dt>readonly attribute boolean hwAccel</dt>
-            <dd>True if the video decoding is hardward accelerated, false otherwise</dd>
+            <dd></dd>
             <dt>readonly attribute boolean encode</dt>
-            <dd>True if the device can encode the video in this format, false otherwise</dd>
+            <dd></dd>
           </dl>
+          <p>
+            The <code>format</code> attribute MUST return a string representing
+            the video encoding format, e.g. <code>"H.264"</code>,
+            <code>"MPEG4"</code>.
+          </p>
+          <p>
+            The <code>hwAccel</code> attribute MUST return true, if the video
+            decoding is hardward accelerated, false otherwise.
+          </p>
+          <p>
+            The <code>encode</code> attribute MUST return true, the device can
+            encode the video in this format, false otherwise.
+          </p>
         </section>
       </section>
     </section>
     <section>
       <h2>
-        Requirements &amp; Use Case
+        Use Cases and Requirements
       </h2>
       <b>Stream Video Content to Device</b>
       <p>51% of the online video content in US is user generated.It typically
