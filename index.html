@@ -567,22 +567,22 @@ setTimeout(monitorFreeMemory, 5);
           <dd>
           </dd>
           <dt>
-            readonly attribute boolean isPrimary
+            readonly attribute boolean primary
           </dt>
           <dd>
           </dd>
           <dt>
-            readonly attribute boolean isInternal
+            readonly attribute boolean external
           </dt>
           <dd>
           </dd>
           <dt>
-            readonly attribute unsigned int dpiX
+            readonly attribute unsigned int deviceXDPI
           </dt>
           <dd>
           </dd>
           <dt>
-            readonly attribute unsigned int dpiY
+            readonly attribute unsigned int deviceYDPI
           </dt>
           <dd>
           </dd>
@@ -597,20 +597,20 @@ setTimeout(monitorFreeMemory, 5);
           for the user.
         </p>
         <p>
-          The <code>isPrimary</code> attribute MUST return
+          The <code>primary</code> attribute MUST return
           true, if the display is the primary display of the system.
         </p>
         <p>
-          The <code>isInternal</code> attribute MUST return
-          true, if the display is internal i.e. integral part of the
+          The <code>external</code> attribute MUST return
+          true, if the display is external i.e. not an integral part of the
           system.
         </p>
         <p>
-          The <code>dpiX</code> attribute MUST return
+          The <code>deviceXDPI</code> attribute MUST return
           the number of pixels per inch along the x-axis.
         </p>
         <p>
-          The <code>dpiY</code> attribute MUST return
+          The <code>deviceYDPI</code> attribute MUST return
           the number of pixels per inch along the y-axis.
         </p>
       </section>
